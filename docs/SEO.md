@@ -101,6 +101,52 @@ valor.
 
 ---
 
+## 4 bis. Rendimiento y optimización para celular
+
+La mayoría de las visitas en Guatemala llegan desde un celular con datos móviles.
+El sitio no está solo "adaptado" a esa pantalla: está construido pensando en ella.
+
+**Lo que se hizo, en concreto:**
+
+- **CSS crítico incrustado** en el HTML y la hoja completa cargada de forma
+  asíncrona: la primera pantalla se dibuja sin esperar ninguna descarga.
+- **Tipografías propias**, servidas desde el mismo dominio, con `font-display: swap`.
+  No hay ninguna llamada a Google Fonts ni a ninguna otra red externa.
+- **Imágenes en WebP**, con ancho y alto declarados para que nada salte mientras
+  carga. El desplazamiento acumulado (CLS) medido es prácticamente cero.
+- **JavaScript mínimo** (unos 3 KB minificados) y sin librerías. Nada del contenido
+  depende de que el JavaScript funcione.
+- **`content-visibility: auto`** a partir de la cuarta franja de cada página: el
+  navegador se salta el cálculo de estilos y posiciones de las secciones que
+  todavía no se ven. **El contenido sigue en el HTML** —no se oculta nada ni se le
+  esconde nada a Google—, simplemente el navegador deja de trabajar en lo que no
+  está en pantalla. En las mediciones bajó el tiempo de bloqueo del hilo principal
+  a menos de la mitad.
+- **La tabla comparativa de precios se convierte en tarjetas verticales** en
+  pantallas de menos de 720 px. Antes había que arrastrar de lado para ver la
+  segunda columna. Ahora cada servicio se lee completo, de arriba abajo, con el
+  mismo dato: precio, pago inicial, saldo y qué incluye.
+- **Sin desbordamiento horizontal** en 360, 390, 768, 1024 y 1440 px. Está medido,
+  no supuesto.
+- **Botones y enlaces con área táctil suficiente** y un botón de WhatsApp fijo, que
+  es como de verdad contacta la gente aquí.
+
+**Cómo medirlo vos mismo, cuando el sitio ya esté en el hosting:**
+
+```
+https://pagespeed.web.dev/  →  poné https://paginasweb.gt  →  pestaña "Móvil"
+```
+
+Un dato importante para que no te asuste el número: **la medición depende mucho de
+la máquina y del momento**. Las mismas páginas, sin cambiarles una línea, midieron
+entre 89 y 99 en rendimiento según la carga del servidor de pruebas. Lo que sí es
+estable y es lo que mira Google son las métricas de experiencia: pintado inicial
+alrededor de 1 segundo, contenido principal por debajo de 2 segundos y
+desplazamiento acumulado prácticamente en cero. Accesibilidad, buenas prácticas y
+SEO dan 100 de forma consistente.
+
+---
+
 ## 5. Lista de control antes de publicar contenido nuevo
 
 Pegá esta lista en el panel o imprimila. Toma dos minutos y evita la mayoría de los

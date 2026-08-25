@@ -4,7 +4,7 @@ return [
     'name'     => 'Correo corporativo',
     'template' => 'service',
     'h1'       => 'Cuentas de correo corporativo con tu dominio',
-    'meta_title'       => 'Correo Corporativo con tu Dominio | Guatemala',
+    'meta_title'       => 'Correo Corporativo Guatemala con tu Dominio',
     'meta_description' => 'Cuentas de correo con tu propio dominio para empresas de Guatemala: configuración en celular y computadora, SPF y DKIM, y traslado desde otro proveedor.',
     'og_image' => '/assets/img/og/og-correo-corporativo.webp',
     'sort_order' => 5,

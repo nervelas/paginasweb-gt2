@@ -4,9 +4,10 @@
   <div class="wrap">
     <div class="spec rise">
       <div class="spec__row">
-        <?php foreach ($items as $i): ?>
+        <?php foreach ($items as $n => $i): ?>
         <div class="spec__cell">
-          <span class="spec__k">Dato</span>
+          <?php // Etiqueta corta: la que venga del panel o, si no hay, el número de orden. ?>
+          <span class="spec__k"><?php echo e(isset($i['key']) && $i['key'] !== '' ? $i['key'] : sprintf('%02d', $n + 1)); ?></span>
           <span class="spec__v"><?php echo e($i['value']); ?></span>
           <span class="spec__d"><?php echo e($i['label']); ?></span>
         </div>

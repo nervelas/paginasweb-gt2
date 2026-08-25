@@ -35,9 +35,19 @@
     if (reduce || !('IntersectionObserver' in window)) {
       for (var i = 0; i < subir.length; i++) { subir[i].classList.add('seen'); }
     } else {
+      // Al terminar la aparición se marca 'listo', que fija la opacidad en 1 sin
+      // transición. Así el texto nunca puede quedarse a medio camino, pase lo
+      // que pase con el recorrido de la página.
+      var fijar = function (el) {
+        window.setTimeout(function () { el.classList.add('listo'); }, 1100);
+      };
       var obs = new IntersectionObserver(function (entradas) {
         entradas.forEach(function (en) {
-          if (en.isIntersecting) { en.target.classList.add('seen'); obs.unobserve(en.target); }
+          if (en.isIntersecting) {
+            en.target.classList.add('seen');
+            fijar(en.target);
+            obs.unobserve(en.target);
+          }
         });
       }, { rootMargin: '0px 0px -6% 0px', threshold: 0.05 });
       for (var j = 0; j < subir.length; j++) { obs.observe(subir[j]); }

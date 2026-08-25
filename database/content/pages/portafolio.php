@@ -4,7 +4,7 @@ return [
     'name'     => 'Portafolio',
     'template' => 'portfolio',
     'h1'       => 'Portafolio de sitios web',
-    'meta_title'       => 'Portafolio de Páginas Web en Guatemala | Trabajos',
+    'meta_title'       => 'Portafolio: 24 sitios web hechos en Guatemala',
     'meta_description' => 'Sitios web que diseñamos para empresas guatemaltecas: bufetes, distribuidoras, clínicas, transporte y servicios. Todos en línea y abiertos para revisar.',
     'og_image' => '/assets/img/og/og-portafolio.webp',
     'sort_order' => 6,

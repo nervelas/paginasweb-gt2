@@ -70,6 +70,77 @@ estrategia es de contenido original y superior, no de copiar al competidor.
 
 ---
 
+## 1 bis. Segunda ronda: quién compite por el contenido (agosto 2026)
+
+La primera tabla cubre a quien compite por las **páginas de servicio**. Esta sección
+cubre algo distinto y igual de importante: quién ocupa hoy los primeros lugares en las
+consultas **informativas**, que es donde entra el cliente antes de decidir.
+
+### Los que se quedaron con "cuánto cuesta una página web en Guatemala"
+
+| Sitio | Qué publica | Qué le falta |
+|---|---|---|
+| `wab.com.gt/precio-pagina-web-guatemala-2025/` | Guía de precios con año en la URL | **El año está en la URL.** Cada enero tienen que crear una página nueva o quedarse desactualizados a la vista. Nuestra URL no lleva año |
+| `estoria.gt/cuanto-cuesta-una-pagina-web-en-guatemala/` | "[Precios 2026]" en el título | Rangos amplios sin desglose de qué se paga por cada componente |
+| `goweb360.com/cuanto-cuesta-una-pagina-web-en-guatemala-en-2026/` | Mismo tema, año en la URL | Mismo problema del año en la URL |
+| `bigredes.com/precio-de-diseno-de-paginas-web-en-guatemala/` | "5 Comparativas 2026" | Comparativa entre proveedores, sin precio propio |
+| `pleybast.com`, `mercadeodigital.co`, `webmaster.bluedevs.com` | Artículos del mismo tema | Contenido genérico, poco específico de Guatemala |
+
+**El rango que publica todo el mercado**, verificado en estos resultados:
+
+- Página web en general: **Q900 a más de Q10,000**
+- Landing page sencilla: **Q900 a Q1,800**
+- Sitio empresarial: **Q1,800 a Q3,000**
+- Diseño profesional a la medida: **Q3,000 a Q6,000**
+- Tienda en línea: **Q5,000 a Q10,000**
+- Desarrollo a medida: **más de Q10,000**
+
+Contra ese fondo, **Q1,250 al año con dominio y hosting** y **Q1,750 la tienda** no son
+un precio bajo cualquiera: están por debajo del piso que el propio mercado publica para
+una tienda en línea. Eso hay que decirlo con el número, no con adjetivos.
+
+### Los que compiten por "tiendas virtuales Guatemala"
+
+Aquí el resultado es distinto y conviene entenderlo: la consulta **mezcla agencias con
+plataformas de autoservicio**. Aparecen Plenishop, Mall Bi (Banco Industrial), Neothek
+y tienda.gt junto a agencias como digital11.pro, bluearksolutions.com y la propia
+servicom.gt.
+
+Eso define la propuesta: quien busca ahí está decidiendo entre **armarla solo** o **que
+se la hagan**. La página `/tiendas-virtuales-guatemala/` tiene que contestar esa duda
+—qué te toca a vos y qué nos toca a nosotros— y no limitarse a listar funciones.
+
+### Los que compiten por "correo corporativo Guatemala"
+
+`host.gt`, `neothek.com`, `dylanhost.net`, `vpsguatemala.com`, `deguate.gt`. **Son
+hostings, no agencias.** Venden buzones sueltos (desde unos US$44 al año). Ninguno
+ofrece lo que sí es un problema real del cliente: dejarlo configurado en el celular y
+en la computadora, con SPF y DKIM puestos para que el correo no caiga en spam. Es el
+segmento con la competencia más débil de los tres servicios.
+
+### Títulos que son keyword stuffing de manual
+
+Dos resultados sirven de ejemplo de lo que **no** hay que hacer, y siguen posicionando
+por antigüedad, no por calidad:
+
+- `dlsystemsgt.com` — su title tiene más de 40 palabras clave separadas por comas
+  ("Diseño de Páginas web en Guatemala, Paginas web en Guatemala, diseño paginas web
+  Guatemala, Desarrollo de paginas web, sitio web guatemala, paginas web baratas...").
+- `paginaswebparatodos.com` — el mismo patrón, y además solo sirve por `http://`.
+
+Google trunca esos títulos en el resultado y el usuario ve una lista sin sentido. Un
+título limpio con el precio adentro gana el clic contra eso.
+
+### Aviso de marca que hay que tener presente
+
+Existe **`paginasweb.com.gt`**, un competidor activo con un nombre casi idéntico al
+nuestro. No es un problema legal ni de posicionamiento —son dominios distintos—, pero
+sí conviene saberlo: al recomendar el sitio de viva voz hay que decir
+**"paginasweb punto ge te"**, sin el "com" en medio, o el cliente puede terminar en el
+sitio del competidor.
+
+---
+
 ## 2. Palabras clave por intención
 
 Las palabras clave se agrupan por **intención de búsqueda**, no por volumen. Cada grupo
