@@ -8,6 +8,17 @@ $email = isset($argv[2]) ? $argv[2] : 'admin@paginasweb.gt';
 $clave = isset($argv[3]) ? $argv[3] : 'ClaveNuevaSegura2026';
 $cookie = tempnam(sys_get_temp_dir(), 'pwgt');
 
+// Se carga la aplicación solo para poder limpiar la base entre corridas.
+require dirname(__DIR__) . '/app/bootstrap.php';
+use App\Core\Database;
+
+// Rastros de corridas anteriores: si no se borran, el límite de envíos por IP
+// haría fallar las pruebas del formulario en la segunda vuelta.
+Database::run('DELETE FROM messages WHERE email LIKE ? OR email LIKE ? OR email LIKE ?', ['prueba@%', 'masivo%@ejemplo.com', 'robot@ejemplo.com']);
+Database::run('DELETE FROM login_attempts');
+Database::run('DELETE FROM redirects WHERE source = ?', ['/pagina-vieja-de-prueba/']);
+Database::run('DELETE FROM posts WHERE slug LIKE ?', ['articulo-de-prueba%']);
+
 $fallas = 0;
 
 function http($url, $post = null, $cookie = null, $seguir = false)
@@ -160,6 +171,34 @@ comprobar($r['code'] === 302, 'La trampa para robots descarta el envío en silen
 
 $r = http($base . '/contacto/', ['name' => 'Sin token', 'email' => 'x@y.com', 'message' => 'Mensaje sin token de seguridad.'], $cookie);
 comprobar($r['code'] === 419, 'El formulario sin token CSRF se rechaza', $fallas);
+
+// Límite por IP: al pasar el máximo de envíos por hora el formulario deja de
+// aceptar mensajes y avisa. Se mandan varios seguidos para provocarlo.
+for ($i = 0; $i < 6; $i++) {
+    $r = http($base . '/contacto/', null, $cookie);
+    http($base . '/contacto/', [
+        '_token' => token($r['body']), 'name' => 'Envío masivo ' . $i,
+        'email' => 'masivo' . $i . '@ejemplo.com',
+        'message' => 'Mensaje repetido para probar el límite por dirección IP.',
+        'website' => '', 'page' => '/contacto/',
+    ], $cookie);
+}
+$r = http($base . '/contacto/', null, $cookie);
+comprobar(
+    strpos($r['body'], 'Ya recibimos varios mensajes') !== false,
+    'El formulario frena el envío masivo desde una misma IP',
+    $fallas
+);
+$sobrantes = Database::first(
+    'SELECT COUNT(*) AS total FROM messages WHERE email LIKE ?',
+    ['masivo%@ejemplo.com']
+);
+comprobar(
+    $sobrantes && (int) $sobrantes['total'] <= 5,
+    'No se guardaron más mensajes de los permitidos por hora',
+    $fallas
+);
+Database::run('DELETE FROM messages WHERE email LIKE ?', ['masivo%@ejemplo.com']);
 
 echo "\n-- Bandeja de mensajes --\n";
 $r = http($base . '/admin/mensajes/', null, $cookie);

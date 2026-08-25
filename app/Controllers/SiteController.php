@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Core\Csrf;
+use App\Core\Security;
 use App\Core\Database;
 use App\Core\Mailer;
 use App\Core\Seo;
@@ -216,6 +217,16 @@ class SiteController
             'message' => trim(isset($_POST['message']) ? $_POST['message'] : ''),
         ];
         $honeypot = trim(isset($_POST['website']) ? $_POST['website'] : '');
+
+        // Límite de envíos por IP: frena el correo masivo automatizado sin
+        // estorbarle a nadie que escriba de verdad.
+        if (Security::excedeEnvios(Security::ip())) {
+            $_SESSION['_flash'] = [
+                'message' => 'Ya recibimos varios mensajes desde esta conexión. Escribinos por WhatsApp o volvé a intentar en una hora.',
+                'type'    => 'error',
+            ];
+            \redirect('/contacto/#formulario');
+        }
 
         $errors = [];
         if ($data['name'] === '' || mb_strlen($data['name']) < 2) {

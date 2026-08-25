@@ -383,6 +383,131 @@ if ($php8) {
     linea('ok', count($archivos) . ' archivos PHP sin errores y sin sintaxis exclusiva de PHP 8');
 }
 
+// --------------------------------------------------------- 10. Seguridad
+echo "\n-- 10. Seguridad --\n";
+
+// 10.1 Cabeceras de protección: deben salir aunque Apache no tenga mod_headers.
+$cabecerasEsperadas = [
+    'x-content-type-options'   => 'nosniff',
+    'x-frame-options'          => 'sameorigin',
+    'referrer-policy'          => 'strict-origin-when-cross-origin',
+    'permissions-policy'       => 'camera=()',
+];
+$brutas = '';
+$ch = curl_init($base . '/precios/');
+curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_HEADER => true, CURLOPT_NOBODY => true, CURLOPT_TIMEOUT => 15]);
+$brutas = strtolower((string) curl_exec($ch));
+curl_close($ch);
+$faltan = [];
+foreach ($cabecerasEsperadas as $nombre => $valor) {
+    if (strpos($brutas, $nombre . ': ') === false || strpos($brutas, $valor) === false) {
+        $faltan[] = $nombre;
+    }
+}
+if ($faltan) {
+    linea('fail', 'Faltan cabeceras de seguridad: ' . implode(', ', $faltan));
+    $fallas++;
+} else {
+    linea('ok', 'Cabeceras de seguridad presentes sin depender de mod_headers');
+}
+
+// 10.2 El panel nunca debe ser indexable ni quedar en caché.
+$ch = curl_init($base . '/admin/entrar/');
+curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_HEADER => true, CURLOPT_NOBODY => true, CURLOPT_TIMEOUT => 15]);
+$hAdmin = strtolower((string) curl_exec($ch));
+curl_close($ch);
+if (strpos($hAdmin, 'x-robots-tag: noindex') !== false && strpos($hAdmin, 'no-store') !== false) {
+    linea('ok', 'El panel se sirve con noindex y sin caché');
+} else {
+    linea('fail', 'El panel debería mandar X-Robots-Tag noindex y Cache-Control no-store');
+    $fallas++;
+}
+
+// 10.3 El instalador no puede volver a correr una vez instalado el sitio.
+$ch = curl_init($base . '/install.php');
+curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15]);
+curl_exec($ch);
+$codInstalador = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
+if (!is_file($root . '/public/install.php')) {
+    linea('ok', 'install.php ya no está en el servidor');
+} elseif ($codInstalador === 403 || $codInstalador === 404) {
+    linea('ok', 'El instalador está bloqueado (HTTP ' . $codInstalador . ')');
+} else {
+    linea('fail', 'El instalador respondió HTTP ' . $codInstalador . ': debería estar bloqueado');
+    $fallas++;
+}
+
+// 10.4 Carpetas privadas y de subidas con su .htaccess puesto.
+$protegidas = [
+    'config/.htaccess'         => 'Require all denied',
+    'storage/.htaccess'        => 'Require all denied',
+    'public/uploads/.htaccess' => 'FilesMatch',
+];
+$sinProteger = [];
+foreach ($protegidas as $rel => $debeContener) {
+    $abs = $root . '/' . $rel;
+    if (!is_file($abs) || strpos(file_get_contents($abs), $debeContener) === false) {
+        $sinProteger[] = $rel;
+    }
+}
+if ($sinProteger) {
+    linea('fail', 'Sin protección: ' . implode(', ', $sinProteger));
+    $fallas++;
+} else {
+    linea('ok', 'config/, storage/ y public/uploads/ protegidos por .htaccess');
+}
+
+// 10.5 Toda consulta a la base debe ir preparada, nunca armada con variables.
+$sospechosas = [];
+foreach ($archivos as $archivo) {
+    if (basename($archivo) === 'verificar.php') {
+        continue;
+    }
+    foreach (file($archivo) as $numero => $linea) {
+        if (!preg_match('/\b(SELECT|INSERT INTO|UPDATE|DELETE FROM|SHOW COLUMNS|PRAGMA table_info)\b/i', $linea)) {
+            continue;
+        }
+        // Interpolar un nombre de tabla o de columna solo se acepta si pasa
+        // antes por el validador de identificadores.
+        $sinValidados = preg_replace('/Database::(ident|orden)\([^)]*\)/', 'IDENT', $linea);
+        $sinValidados = preg_replace("/array_map\\(array\\('App\\\\\\\\Core\\\\\\\\Database', 'ident'\\)[^)]*\\)/", 'IDENT', $sinValidados);
+        if (preg_match('/[\'"]\s*\.\s*\$/', $sinValidados) || preg_match('/\{\$/', $sinValidados)) {
+            $sospechosas[] = str_replace($root . '/', '', $archivo) . ':' . ($numero + 1);
+        }
+    }
+}
+if ($sospechosas) {
+    linea('fail', 'Posible SQL armado con variables en: ' . implode(', ', $sospechosas));
+    $fallas++;
+} else {
+    linea('ok', 'Ninguna consulta arma SQL concatenando variables');
+}
+
+// 10.6 El limpiador de HTML tiene que dejar fuera lo que pueda ejecutar código.
+require_once $root . '/app/helpers.php';
+$ataques = [
+    '<script>alert(1)</script>'                  => 'script',
+    '<img src=x onerror=alert(1)>'               => 'onerror',
+    '<a href="javascript:alert(1)">x</a>'        => 'javascript:',
+    '<a href=javascript:alert(1)>x</a>'          => 'javascript:',
+    '<iframe src="//mal.example"></iframe>'      => 'iframe',
+    '<svg onload=alert(1)></svg>'                => 'svg',
+    '<p style="display:none">oculto</p>'         => 'display:none',
+];
+$colados = [];
+foreach ($ataques as $entrada => $rastro) {
+    if (stripos(clean_html($entrada), $rastro) !== false) {
+        $colados[] = $rastro;
+    }
+}
+if ($colados) {
+    linea('fail', 'El limpiador de HTML dejó pasar: ' . implode(', ', $colados));
+    $fallas++;
+} else {
+    linea('ok', 'El limpiador de HTML bloquea script, eventos, javascript:, iframe y texto oculto');
+}
+
 // -------------------------------------------------------------- Resumen
 echo "\n=== RESUMEN ===\n";
 echo "Fallas: {$fallas}   Avisos: {$avisos}\n\n";

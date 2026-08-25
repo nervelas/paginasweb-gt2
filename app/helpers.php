@@ -187,10 +187,66 @@ if (!function_exists('clean_html')) {
      */
     function clean_html(string $html): string
     {
-        $html = preg_replace('#<(script|style|iframe|object|embed|form)\b[^>]*>.*?</\1>#is', '', $html);
-        $html = preg_replace('#<(script|style|iframe|object|embed|form|link|meta)\b[^>]*/?>#i', '', $html);
+        // 1. Fuera las etiquetas que pueden ejecutar código o traer contenido ajeno.
+        $html = preg_replace('#<(script|style|iframe|object|embed|form|svg|math|template|base|noscript)\b[^>]*>.*?</\1>#is', '', $html);
+        $html = preg_replace('#<(script|style|iframe|object|embed|form|link|meta|base|source|track)\b[^>]*/?>#i', '', $html);
+        $html = preg_replace('#<!--.*?-->#s', '', $html);
+
+        // 2. Fuera los manejadores de eventos (onclick, onerror, onload...).
         $html = preg_replace('#\son[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)#i', '', $html);
-        $html = preg_replace('#(href|src)\s*=\s*(["\']?)\s*javascript:[^"\'>]*\2#i', '$1="#"', $html);
+
+        // 3. Fuera los atributos que sirven para ejecutar o traer cosas raras.
+        $html = preg_replace('#\s(formaction|xlink:href|srcdoc|srcset|ping|http-equiv)\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)#i', '', $html);
+
+        // 4. Enlaces e imágenes: solo esquemas sanos. Se permite data: únicamente
+        //    para imágenes, que es el único uso legítimo en un texto del blog.
+        $esquemaSano = function ($valor) {
+            $valor = trim(html_entity_decode($valor, ENT_QUOTES, 'UTF-8'));
+            $valor = preg_replace('/[\s\x00-\x1F]/', '', $valor);
+            if (preg_match('#^data:image/(png|jpeg|jpg|gif|webp|avif);base64,#i', $valor)) {
+                return true;
+            }
+            return !preg_match('#^(javascript|vbscript|data|blob|file):#i', $valor);
+        };
+        // Valor entre comillas.
+        $html = preg_replace_callback(
+            '#(href|src)\s*=\s*(["\'])(.*?)\2#is',
+            function ($m) use ($esquemaSano) {
+                return $esquemaSano($m[3]) ? $m[0] : $m[1] . '="#"';
+            },
+            $html
+        );
+        // Valor sin comillas.
+        $html = preg_replace_callback(
+            '#(href|src)\s*=\s*([^\s"\'>]+)#i',
+            function ($m) use ($esquemaSano) {
+                return $esquemaSano($m[2]) ? $m[0] : $m[1] . '="#"';
+            },
+            $html
+        );
+
+        // 5. Nada de estilos que escondan texto: eso es justo lo que Google
+        //    castiga y no tiene ningún uso legítimo dentro de un artículo.
+        $html = preg_replace_callback(
+            '#\sstyle\s*=\s*(["\'])(.*?)\1#is',
+            function ($m) {
+                $css = strtolower(preg_replace('/\s+/', '', $m[2]));
+                $prohibido = [
+                    'display:none', 'visibility:hidden', 'opacity:0', 'font-size:0',
+                    'text-indent:-', 'position:absolute;left:-', 'clip:rect(0',
+                    'height:0', 'width:0', 'expression(', 'url(javascript',
+                ];
+                foreach ($prohibido as $mal) {
+                    if (strpos($css, $mal) !== false) {
+                        return '';
+                    }
+                }
+                return $m[0];
+            },
+            $html
+        );
+
+        // 6. Y al final, solo pasan las etiquetas de la lista blanca.
         $allowed = '<p><br><strong><b><em><i><u><ul><ol><li><h2><h3><h4><h5><blockquote><a><img><table><thead><tbody><tr><th><td><figure><figcaption><hr><span><div><small><sup><sub><code><pre>';
         return trim((string) strip_tags($html, $allowed));
     }

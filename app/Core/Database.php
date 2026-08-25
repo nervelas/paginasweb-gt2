@@ -9,6 +9,41 @@ use PDOException;
  */
 class Database
 {
+    /**
+     * Valida un nombre de tabla o de columna. Los identificadores no se pueden
+     * mandar como parámetro preparado, así que el único camino seguro es
+     * aceptar solo letras, números y guion bajo. Si llega otra cosa, se corta.
+     */
+    public static function ident($nombre)
+    {
+        $nombre = (string) $nombre;
+        if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $nombre)) {
+            throw new \InvalidArgumentException('Identificador de base de datos no válido: ' . $nombre);
+        }
+        return $nombre;
+    }
+
+    /**
+     * Valida una cláusula ORDER BY: solo columnas separadas por coma, con
+     * ASC/DESC opcional. Nada de subconsultas ni de paréntesis.
+     */
+    public static function orden($clausula)
+    {
+        $clausula = trim((string) $clausula);
+        if ($clausula === '') {
+            return 'id';
+        }
+        $partes = array_map('trim', explode(',', $clausula));
+        $limpias = [];
+        foreach ($partes as $parte) {
+            if (!preg_match('/^([A-Za-z_][A-Za-z0-9_]*)(\s+(ASC|DESC))?$/i', $parte, $m)) {
+                throw new \InvalidArgumentException('Orden de base de datos no válido: ' . $clausula);
+            }
+            $limpias[] = $m[1] . (isset($m[3]) ? ' ' . strtoupper($m[3]) : '');
+        }
+        return implode(', ', $limpias);
+    }
+
     private static ?PDO $pdo = null;
     private static string $driver = 'mysql';
 
@@ -93,10 +128,10 @@ class Database
 
     public static function insert(string $table, array $data): int
     {
-        $cols = array_keys($data);
+        $cols = array_map([self::class, 'ident'], array_keys($data));
         $sql  = sprintf(
             'INSERT INTO %s (%s) VALUES (%s)',
-            $table,
+            self::ident($table),
             implode(', ', $cols),
             implode(', ', array_map(fn($c) => ':' . $c, $cols))
         );
@@ -106,14 +141,14 @@ class Database
 
     public static function update(string $table, array $data, string $where, array $whereParams = []): int
     {
-        $sets = implode(', ', array_map(fn($c) => $c . ' = :' . $c, array_keys($data)));
-        $sql  = sprintf('UPDATE %s SET %s WHERE %s', $table, $sets, $where);
+        $sets = implode(', ', array_map(fn($c) => self::ident($c) . ' = :' . $c, array_keys($data)));
+        $sql  = sprintf('UPDATE %s SET %s WHERE %s', self::ident($table), $sets, $where);
         return self::run($sql, array_merge($data, $whereParams))->rowCount();
     }
 
     public static function delete(string $table, string $where, array $params = []): int
     {
-        return self::run(sprintf('DELETE FROM %s WHERE %s', $table, $where), $params)->rowCount();
+        return self::run(sprintf('DELETE FROM %s WHERE %s', self::ident($table), $where), $params)->rowCount();
     }
 
     /**
@@ -142,7 +177,7 @@ class Database
                     [$table]
                 );
             }
-            self::run('SELECT 1 FROM ' . $table . ' LIMIT 1');
+            self::run('SELECT 1 FROM ' . self::ident($table) . ' LIMIT 1');
             return true;
         } catch (\Throwable $e) {
             return false;

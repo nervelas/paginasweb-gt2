@@ -116,6 +116,21 @@ ErrorDocument 404 /index.php
 ErrorDocument 403 /index.php
 
 # --------------------------------------------------- Proteger archivos internos
-<FilesMatch "^(config\.php|composer\.(json|lock)|\.env|.*\.sql|.*\.md|.*\.sqlite)$">
-    Require all denied
+<FilesMatch "^(config\.php|composer\.(json|lock)|\.env|.*\.sql|.*\.md|.*\.sqlite|.*\.log|.*\.bak|.*\.ini|.*\.lock)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
+
+# Nada de listados de carpetas ni de seguir enlaces simbólicos ajenos.
+Options -Indexes +FollowSymLinks
+
+# Métodos HTTP que el sitio no usa.
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK|DEBUG)$
+    RewriteRule .* - [F,L]
+</IfModule>

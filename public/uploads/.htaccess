@@ -1,8 +1,30 @@
-# En esta carpeta solo se sirven imágenes y documentos: nunca se ejecuta código.
-php_flag engine off
-Options -ExecCGI -Indexes
-AddType text/plain .php .php3 .php4 .php5 .php7 .php8 .phtml .pl .py .cgi .sh .html .htm
+# En esta carpeta solo se sirven imágenes: nunca se ejecuta código.
+# Cada bloque va protegido con IfModule para que el sitio no se caiga con un
+# error 500 en servidores donde ese módulo no existe (PHP-FPM, CGI, Apache 2.2).
 
-<FilesMatch "\.(php|php3|php4|php5|php7|php8|phtml|pl|py|cgi|sh|htaccess)$">
-    Require all denied
+Options -ExecCGI -Indexes
+
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php5.c>
+    php_flag engine off
+</IfModule>
+
+<IfModule mod_mime.c>
+    RemoveHandler .php .php3 .php4 .php5 .php7 .php8 .phtml .pl .py .cgi .sh
+    AddType text/plain .php .php3 .php4 .php5 .php7 .php8 .phtml .pl .py .cgi .sh .html .htm
+</IfModule>
+
+<FilesMatch "\.(php|php3|php4|php5|php7|php8|phtml|phar|pl|py|cgi|sh|htaccess|ini)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
 </FilesMatch>

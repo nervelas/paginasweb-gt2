@@ -19,3 +19,5 @@ Thumbs.db
 
 # Dependencias de desarrollo (no se usan en producción)
 /node_modules/
+entrega/
+storage/errores.log

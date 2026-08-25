@@ -8,12 +8,13 @@ require dirname(dirname(__DIR__)) . '/app/bootstrap.php';
 use App\Controllers\AdminController;
 use App\Core\Auth;
 use App\Core\Router;
+use App\Core\Security;
 use App\Core\View;
 
-header('X-Robots-Tag: noindex, nofollow', true);
+Security::cabecerasPanel();
 
 $path = parse_url(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/admin/', PHP_URL_PATH);
-$path = '/' . ltrim(rawurldecode($path), '/');
+$path = Security::rutaSegura(rawurldecode($path));
 if (substr($path, -1) !== '/') {
     header('Location: ' . $path . '/', true, 301);
     exit;

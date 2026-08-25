@@ -33,6 +33,12 @@ class View
 
     public static function partial(string $view, array $data = []): string
     {
+        // Solo se aceptan nombres de vista con letras, números, guiones y
+        // separadores simples: así ninguna plantilla puede salirse de app/Views/
+        // por más que el nombre venga de la base de datos.
+        if (!preg_match('#^[A-Za-z0-9_\-]+([./][A-Za-z0-9_\-]+)*$#', $view)) {
+            throw new \RuntimeException('Nombre de vista no válido: ' . $view);
+        }
         $file = self::$basePath . '/' . str_replace('.', '/', $view) . '.php';
         if (!is_file($file)) {
             throw new \RuntimeException('Vista no encontrada: ' . $view);

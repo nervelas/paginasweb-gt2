@@ -6,6 +6,13 @@ namespace App\Core;
  */
 class Auth
 {
+    /**
+     * Hash bcrypt real de una contraseña aleatoria que nadie conoce. Se usa
+     * únicamente para que verificar un correo inexistente cueste lo mismo que
+     * verificar uno real y no se pueda adivinar qué usuarios existen.
+     */
+    private const HASH_RELLENO = '$2y$12$o89kvbJRPeVrRve5J6DJP.9g/SCVeaRBX7XFdT./MPebWnl5gIZj6';
+
     private const MAX_ATTEMPTS = 5;
     private const LOCK_MINUTES = 15;
 
@@ -36,7 +43,15 @@ class Auth
         }
 
         $user = Database::first('SELECT * FROM users WHERE email = ? AND active = 1', [$email]);
-        $valid = $user && password_verify($password, $user['password_hash']);
+        if ($user) {
+            $valid = password_verify($password, $user['password_hash']);
+        } else {
+            // Se compara igual contra un hash de relleno para que un correo que
+            // no existe tarde lo mismo que uno que sí: así nadie puede adivinar
+            // qué usuarios están dados de alta midiendo el tiempo de respuesta.
+            password_verify($password, self::HASH_RELLENO);
+            $valid = false;
+        }
 
         self::logAttempt($email, $ip, $valid);
 

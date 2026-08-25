@@ -8,12 +8,14 @@ require dirname(__DIR__) . '/app/bootstrap.php';
 use App\Controllers\SiteController;
 use App\Core\Database;
 use App\Core\Router;
+use App\Core\Security;
 use App\Core\Settings;
 use App\Core\View;
 use App\Models\Content;
 
 $path = parse_url(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/', PHP_URL_PATH);
-$path = '/' . ltrim(rawurldecode($path), '/');
+$path = Security::rutaSegura(rawurldecode($path));
+Security::cabecerasPublicas();
 $GLOBALS['__current_path'] = $path;
 
 // Barra final obligatoria (excepto archivos con extensión)

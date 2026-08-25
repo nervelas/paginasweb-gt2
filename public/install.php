@@ -29,9 +29,12 @@ use App\Core\Database;
 $lockFile   = APP_ROOT . '/storage/instalado.lock';
 $configFile = APP_ROOT . '/config/config.php';
 
-if (is_file($lockFile)) {
+// El instalador solo puede correr una vez. Se bloquea con el candado y también
+// con la sola existencia de config/config.php, para que nadie pueda reinstalar
+// el sitio (y quedarse con el usuario administrador) borrando un archivo.
+if (is_file($lockFile) || is_file($configFile)) {
     http_response_code(403);
-    exit('El sitio ya está instalado. Borrá public/install.php del servidor. Si necesitás reinstalar, eliminá storage/instalado.lock.');
+    exit('El sitio ya está instalado. Borrá public/install.php del servidor. Si de verdad necesitás reinstalar, eliminá storage/instalado.lock y config/config.php desde el administrador de archivos de cPanel.');
 }
 
 // --------------------------------------------------------------- requisitos

@@ -66,12 +66,12 @@ $salida[] = '';
 
 $total = 0;
 foreach ($tablas as $tabla) {
-    $filas = Database::all('SELECT * FROM ' . $tabla . ' ORDER BY id');
+    $filas = Database::all('SELECT * FROM ' . Database::ident($tabla) . ' ORDER BY id');
     if (!$filas) {
         continue;
     }
     $salida[] = '-- ' . str_pad(strtoupper($tabla) . ' ', 74, '-');
-    $salida[] = 'DELETE FROM ' . $tabla . ';';
+    $salida[] = 'DELETE FROM ' . Database::ident($tabla) . ';';
 
     $columnas = array_keys($filas[0]);
     foreach (array_chunk($filas, 25) as $grupo) {
@@ -92,7 +92,7 @@ foreach ($tablas as $tabla) {
             }
             $valores[] = '  (' . implode(', ', $celdas) . ')';
         }
-        $salida[] = 'INSERT INTO ' . $tabla . ' (' . implode(', ', $columnas) . ') VALUES';
+        $salida[] = 'INSERT INTO ' . Database::ident($tabla) . ' (' . implode(', ', array_map(array('App\\Core\\Database', 'ident'), $columnas)) . ') VALUES';
         $salida[] = implode(",\n", $valores) . ';';
     }
     $salida[] = '';

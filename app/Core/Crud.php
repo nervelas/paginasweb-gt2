@@ -37,12 +37,12 @@ class Crud
 
     public function listar()
     {
-        return Database::all('SELECT * FROM ' . $this->def['tabla'] . ' ORDER BY ' . $this->def['orden']);
+        return Database::all('SELECT * FROM ' . Database::ident($this->def['tabla']) . ' ORDER BY ' . Database::orden($this->def['orden']));
     }
 
     public function obtener($id)
     {
-        return Database::first('SELECT * FROM ' . $this->def['tabla'] . ' WHERE id = ?', [$id]);
+        return Database::first('SELECT * FROM ' . Database::ident($this->def['tabla']) . ' WHERE id = ?', [$id]);
     }
 
     /** Opciones de un campo tipo selección que se alimenta de otra tabla. */
@@ -55,7 +55,7 @@ class Crud
             return [];
         }
         $o = $campo['origen'];
-        $filas = Database::all('SELECT ' . $o['valor'] . ' AS v, ' . $o['texto'] . ' AS t FROM ' . $o['tabla'] . ' ORDER BY t');
+        $filas = Database::all('SELECT ' . Database::ident($o['valor']) . ' AS v, ' . Database::ident($o['texto']) . ' AS t FROM ' . Database::ident($o['tabla']) . ' ORDER BY t');
         $out = [];
         foreach ($filas as $f) {
             $out[$f['v']] = $f['t'] === '' ? '(Inicio)' : $f['t'];
@@ -133,7 +133,7 @@ class Crud
 
         // Unicidad de slug donde corresponde
         if (isset($this->def['campos']['slug']) && array_key_exists('slug', $datos)) {
-            $sql = 'SELECT COUNT(*) FROM ' . $this->def['tabla'] . ' WHERE slug = ?';
+            $sql = 'SELECT COUNT(*) FROM ' . Database::ident($this->def['tabla']) . ' WHERE slug = ?';
             $params = [$datos['slug']];
             if ($registro) {
                 $sql .= ' AND id <> ?';
@@ -178,11 +178,11 @@ class Crud
         }
         $cols = [];
         if (Database::driver() === 'sqlite') {
-            foreach (Database::all('PRAGMA table_info(' . $tabla . ')') as $c) {
+            foreach (Database::all('PRAGMA table_info(' . Database::ident($tabla) . ')') as $c) {
                 $cols[] = $c['name'];
             }
         } else {
-            foreach (Database::all('SHOW COLUMNS FROM ' . $tabla) as $c) {
+            foreach (Database::all('SHOW COLUMNS FROM ' . Database::ident($tabla)) as $c) {
                 $cols[] = $c['Field'];
             }
         }
