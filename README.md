@@ -28,6 +28,7 @@ Composer en producción.
 |---|---|
 | `php tools/verificar.php` | 0 fallas, 0 avisos |
 | `php tools/probar-panel.php` | 0 fallas (26 pruebas) |
+| `php tools/revisar-enlaces.php` | 0 enlaces rotos, 0 páginas huérfanas (23 páginas) |
 | Lighthouse móvil, 8 páginas | 98–100 en rendimiento, accesibilidad, buenas prácticas y SEO |
 | Validación HTML (33 documentos) | Sin errores |
 | Compatibilidad PHP | 7.4 a 8.4 |
@@ -84,6 +85,9 @@ php tools/verificar.php https://paginasweb.gt
 
 # Prueba del panel, los formularios y la seguridad
 php tools/probar-panel.php https://paginasweb.gt correo@ejemplo.com "contraseña"
+
+# Rastreo de enlaces internos rotos y páginas huérfanas
+php tools/revisar-enlaces.php https://paginasweb.gt
 
 # Regenerar CSS y JS minificados
 php tools/build-assets.php

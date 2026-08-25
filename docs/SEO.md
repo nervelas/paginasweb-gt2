@@ -142,6 +142,9 @@ php tools/verificar.php https://paginasweb.gt
 # Prueba del panel y de los formularios
 php tools/probar-panel.php https://paginasweb.gt correo@ejemplo.com "contraseña"
 
+# Rastreo de enlaces internos rotos y páginas huérfanas
+php tools/revisar-enlaces.php https://paginasweb.gt
+
 # Regenerar CSS y JS minificados después de editar los archivos fuente
 php tools/build-assets.php
 ```
