@@ -15,7 +15,10 @@ Composer en producción.
 - **34 preguntas frecuentes** asignables por página, que generan el schema `FAQPage`.
 - **24 proyectos** de portafolio con enlace a los sitios en línea.
 - **Panel de administración** en español, usable desde el celular, con 15 módulos.
-- **Imágenes originales**: logotipo, ilustraciones SVG, mockups y portadas para redes.
+- **Sistema visual propio** "Taller editorial": lienzo alterno obsidiana/hueso, un solo
+  color de señal, reglas capilares y tipografía editorial.
+- **Imágenes originales**: logotipo en trazos, láminas técnicas SVG, composición del
+  hero y portadas para redes.
 - **SEO técnico completo**: JSON-LD, sitemap y robots dinámicos, canonical, hreflang,
   Open Graph, redirecciones 301 administrables.
 
@@ -98,10 +101,23 @@ php tools/instalar-local.php http://localhost:8080
 php -S localhost:8080 -t public
 ```
 
+## Sistema visual
+
+| Elemento | Decisión |
+|---|---|
+| Lienzos | Obsidiana `#0A0C0F` y hueso `#F3F0E9`, alternados por sección |
+| Color de señal | Verde quetzal `#11E39A`; sobre fondo claro se usa `#04684E` |
+| Titulares | Instrument Serif, alto contraste, con cursiva como voz secundaria |
+| Texto | Geist |
+| Etiquetas y datos | Geist Mono, en versalitas con numeración `01 —` |
+| Forma | Reglas capilares y marcas de esquina; sin sombras ni esquinas redondeadas |
+
+Los cuatro colores se editan desde **/admin → Configuración → Colores de la marca**.
+
 ## Créditos de las tipografías
 
-- **Fraunces** — SIL Open Font License 1.1
-- **Manrope** — SIL Open Font License 1.1
+- **Instrument Serif** — SIL Open Font License 1.1
+- **Geist** y **Geist Mono** — SIL Open Font License 1.1
 
 Las licencias están en `public/assets/fonts/`.
 

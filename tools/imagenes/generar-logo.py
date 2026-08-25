@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Genera el logotipo de paginasweb.gt en SVG (versión color y versión blanca)
-y la marca suelta para favicon e iconos. El texto va convertido a trazos,
-así se ve igual en cualquier navegador sin cargar tipografías.
+Identidad de paginasweb.gt: logotipo en trazos (sin depender de tipografías
+en el navegador), versión clara y oscura, marca cuadrada y logotipo grande
+para el pie de página.
 """
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -10,81 +10,71 @@ from importlib import import_module
 t2s = import_module('texto-a-svg')
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-FONT = os.path.join(ROOT, 'public/assets/fonts/manrope-latin-wght.woff2')
+GEIST = os.path.join(ROOT, 'public/assets/fonts/geist-wght.woff2')
+SERIF = os.path.join(ROOT, 'public/assets/fonts/instrument-serif-400.woff2')
 OUT = os.path.join(ROOT, 'public/assets/img')
 
-JADE, JADE_DEEP, CORAL, INK, PAPER = '#12796B', '#0B5347', '#FF7A45', '#0A1F2C', '#F7F3EC'
+OBSIDIAN = '#0A0C0F'
+BONE     = '#F3F0E9'
+QUETZAL  = '#11E39A'
+QUETZAL_INK = '#04684E'
 
-SIZE = 26.0
-SPACING = -0.6
-MARK_W = 44.0
-GAP = 13.0
-BASELINE = 30.5
-
-
-def marca(idc, color_fondo, color_pagina, color_acento, borde=None):
-    """Cuadrado redondeado con dos hojas superpuestas y una barra de acento."""
-    borde_attr = f' stroke="{borde}" stroke-width="1.5"' if borde else ''
-    return f'''<g id="{idc}">
-    <rect x="0" y="0" width="44" height="44" rx="13" fill="{color_fondo}"{borde_attr}/>
-    <rect x="9.5" y="10" width="19" height="24" rx="3.5" fill="{color_pagina}" opacity=".42"/>
-    <rect x="15.5" y="14" width="19" height="24" rx="3.5" fill="{color_pagina}"/>
-    <rect x="15.5" y="14" width="19" height="5.6" rx="2.8" fill="{color_acento}"/>
-    <rect x="15.5" y="16.8" width="19" height="2.8" fill="{color_acento}"/>
-    <circle cx="19.2" cy="16.8" r="1.15" fill="{color_pagina}" opacity=".85"/>
-    <circle cx="23" cy="16.8" r="1.15" fill="{color_pagina}" opacity=".85"/>
-    <rect x="19" y="23" width="12" height="2.2" rx="1.1" fill="{color_fondo}" opacity=".55"/>
-    <rect x="19" y="27.4" width="8.4" height="2.2" rx="1.1" fill="{color_fondo}" opacity=".38"/>
-  </g>'''
+ALTO = 26.0          # altura de referencia del logotipo
+TRACK = -0.9         # ajuste óptico entre letras
 
 
-def logo(color_texto, color_punto_gt, marca_svg, mark_w=MARK_W):
-    p1, w1 = t2s.text_to_path(FONT, 800, 'paginasweb', SIZE, SPACING)
-    p2, w2 = t2s.text_to_path(FONT, 800, '.gt', SIZE, SPACING)
-    total_w = mark_w + GAP + w1 + w2
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {total_w:.1f} 44" width="{total_w:.1f}" height="44" role="img" aria-label="paginasweb.gt">
-  <title>paginasweb.gt</title>
-{marca_svg}
-  <g transform="translate({mark_w + GAP:.2f},{BASELINE})" fill="{color_texto}">{p1}</g>
-  <g transform="translate({mark_w + GAP + w1:.2f},{BASELINE})" fill="{color_punto_gt}">{p2}</g>
-</svg>
-'''
+def wordmark(color_texto, color_punto):
+    """Logotipo horizontal: 'paginasweb' + '.gt' en el color de señal."""
+    p1, w1 = t2s.text_to_path(GEIST, 600, 'paginasweb', ALTO, TRACK)
+    p2, w2 = t2s.text_to_path(GEIST, 600, '.gt', ALTO, TRACK)
+    ancho = w1 + w2
+    alto = 26.0
+    base = 19.4       # línea de base dentro del lienzo
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {ancho:.1f} {alto}" '
+        f'width="{ancho:.1f}" height="{alto}" role="img" aria-label="paginasweb.gt">'
+        f'<title>paginasweb.gt</title>'
+        f'<g transform="translate(0,{base})" fill="{color_texto}">{p1}</g>'
+        f'<g transform="translate({w1:.2f},{base})" fill="{color_punto}">{p2}</g>'
+        f'</svg>\n'
+    )
 
 
-os.makedirs(OUT, exist_ok=True)
+def marca_cuadrada(fondo, letra, tam=64, radio=0):
+    """Marca compacta para favicon e iconos de aplicación."""
+    p, w = t2s.text_to_path(GEIST, 600, 'p.', tam * 0.56, -0.6)
+    x = (tam - w) / 2
+    y = tam * 0.5 + tam * 0.2
+    r = f' rx="{radio}"' if radio else ''
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {tam} {tam}" '
+        f'width="{tam}" height="{tam}" role="img" aria-label="paginasweb.gt">'
+        f'<title>paginasweb.gt</title>'
+        f'<rect width="{tam}" height="{tam}"{r} fill="{fondo}"/>'
+        f'<g transform="translate({x:.2f},{y:.2f})" fill="{letra}">{p}</g>'
+        f'</svg>\n'
+    )
+
+
+def logotipo_grande():
+    """Logotipo enorme del pie, en la serif editorial, para usar con currentColor."""
+    p, w = t2s.text_to_path(SERIF, 400, 'paginasweb.gt', 200, -3.2)
+    alto = 200.0
+    base = 152.0
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w:.1f} {alto:.0f}" '
+        f'width="{w:.1f}" height="{alto:.0f}" aria-hidden="true" focusable="false">'
+        f'<g transform="translate(0,{base})" fill="currentColor">{p}</g>'
+        f'</svg>\n'
+    )
+
+
 os.makedirs(os.path.join(OUT, 'icons'), exist_ok=True)
 
-# Versión a color, para fondo claro
-color = logo(INK, CORAL, marca('m', JADE, '#FFFFFF', CORAL))
-open(os.path.join(OUT, 'logo-paginasweb-gt.svg'), 'w').write(color)
+open(os.path.join(OUT, 'marca.svg'), 'w').write(wordmark(OBSIDIAN, QUETZAL_INK))
+open(os.path.join(OUT, 'marca-blanca.svg'), 'w').write(wordmark(BONE, QUETZAL))
+open(os.path.join(OUT, 'marca-grande.svg'), 'w').write(logotipo_grande())
+open(os.path.join(ROOT, 'public/favicon.svg'), 'w').write(marca_cuadrada(QUETZAL, OBSIDIAN))
+open(os.path.join(OUT, 'icons/marca-cuadrada.svg'), 'w').write(marca_cuadrada(QUETZAL, OBSIDIAN, 512))
 
-# Versión blanca, para el pie de página oscuro
-blanco = logo('#FFFFFF', CORAL, marca('m', '#FFFFFF', JADE_DEEP, CORAL))
-open(os.path.join(OUT, 'logo-paginasweb-gt-blanco.svg'), 'w').write(blanco)
-
-# Marca suelta (favicon e iconos de aplicación)
-favicon = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="44" height="44" role="img" aria-label="paginasweb.gt">
-  <title>paginasweb.gt</title>
-{marca('m', JADE, '#FFFFFF', CORAL)}
-</svg>
-'''
-open(os.path.join(ROOT, 'public/favicon.svg'), 'w').write(favicon)
-
-# Versión con margen para iconos PWA (fondo completo)
-icono = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="14" fill="{JADE}"/>
-  <g transform="translate(10,10) scale(1)">
-    <rect x="9.5" y="10" width="19" height="24" rx="3.5" fill="#FFFFFF" opacity=".42"/>
-    <rect x="15.5" y="14" width="19" height="24" rx="3.5" fill="#FFFFFF"/>
-    <rect x="15.5" y="14" width="19" height="5.6" rx="2.8" fill="{CORAL}"/>
-    <rect x="15.5" y="16.8" width="19" height="2.8" fill="{CORAL}"/>
-    <circle cx="19.2" cy="16.8" r="1.15" fill="#FFFFFF" opacity=".85"/>
-    <circle cx="23" cy="16.8" r="1.15" fill="#FFFFFF" opacity=".85"/>
-    <rect x="19" y="23" width="12" height="2.2" rx="1.1" fill="{JADE}" opacity=".55"/>
-    <rect x="19" y="27.4" width="8.4" height="2.2" rx="1.1" fill="{JADE}" opacity=".38"/>
-  </g>
-</svg>
-'''
-open(os.path.join(OUT, 'icons/marca-cuadrada.svg'), 'w').write(icono)
-
-print('Logotipos generados en', OUT)
+print('Identidad generada en', OUT)

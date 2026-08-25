@@ -1,8 +1,6 @@
-<section class="section section--tight">
-  <div class="wrap wrap-narrow">
-    <div class="prose"><?php echo $section['body']; ?></div>
-    <p style="margin-top:2.5rem;color:var(--ink-50);font-size:.88rem">
-      Última actualización: <?php echo e(fecha_es($page['updated_at'])); ?>.
-    </p>
-  </div>
-</section>
+<?php echo partial('partials/band-open', ['lienzo' => 'bone', 'tight' => true]); ?>
+  <div class="prose"><?php echo $section['body']; ?></div>
+  <p class="mono" style="margin-top:3rem;color:var(--on-bone-faint)">
+    Última actualización: <?php echo e(fecha_es($page['updated_at'])); ?>
+  </p>
+<?php echo partial('partials/band-close'); ?>

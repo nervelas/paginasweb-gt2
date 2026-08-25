@@ -11,10 +11,10 @@ $ogType    = isset($seo['og_type']) ? $seo['og_type'] : 'website';
 if (Settings::get('site_noindex', '0') === '1') {
     $robots = 'noindex, nofollow';
 }
-$criticalCss = @file_get_contents(PUBLIC_PATH . '/assets/css/critical.min.css');
-$ga4    = Settings::get('ga4_id');
-$pixel  = Settings::get('meta_pixel_id');
-$gsc    = Settings::get('search_console_verify');
+$critico = @file_get_contents(PUBLIC_PATH . '/assets/css/critical.min.css');
+$ga4   = Settings::get('ga4_id');
+$pixel = Settings::get('meta_pixel_id');
+$gsc   = Settings::get('search_console_verify');
 ?><!DOCTYPE html>
 <html lang="es-GT">
 <head>
@@ -45,29 +45,28 @@ $gsc    = Settings::get('search_console_verify');
 <meta name="twitter:title" content="<?php echo e($title); ?>">
 <meta name="twitter:description" content="<?php echo e($desc); ?>">
 <meta name="twitter:image" content="<?php echo e($ogImage); ?>">
-<meta name="theme-color" content="<?php echo e(Settings::get('color_ink', '#0A1F2C')); ?>">
+<meta name="theme-color" content="<?php echo e(Settings::get('color_ink', '#0A0C0F')); ?>">
 
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/icons/icono-180.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="preload" href="/assets/fonts/manrope-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/fraunces-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/geist-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin>
 
 <script>document.documentElement.className+=' js';</script>
-<style><?php echo $criticalCss; ?></style>
+<style><?php echo $critico; ?></style>
 <?php
-$brandVars = [
-    '--ink'    => Settings::get('color_ink'),
-    '--brand'  => Settings::get('color_brand'),
-    '--accent' => Settings::get('color_accent'),
-    '--paper'  => Settings::get('color_paper'),
-    '--gold'   => Settings::get('color_gold'),
+$vars = [
+    '--obsidian'    => Settings::get('color_ink'),
+    '--bone'        => Settings::get('color_paper'),
+    '--quetzal'     => Settings::get('color_brand'),
+    '--quetzal-ink' => Settings::get('color_brand_ink'),
 ];
 $css = '';
-foreach ($brandVars as $var => $value) {
-    if ($value && preg_match('/^#[0-9A-Fa-f]{3,8}$/', $value)) {
-        $css .= $var . ':' . $value . ';';
+foreach ($vars as $var => $valor) {
+    if ($valor && preg_match('/^#[0-9A-Fa-f]{6}$/', $valor)) {
+        $css .= $var . ':' . $valor . ';';
     }
 }
 if ($css !== '') { echo '<style>:root{' . $css . '}</style>'; }
@@ -94,13 +93,13 @@ fbq('init','<?php echo e($pixel); ?>');fbq('track','PageView');
 <?php endif; ?>
 </head>
 <body class="<?php echo e(isset($bodyClass) ? $bodyClass : ''); ?>">
-<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<a class="skip" href="#contenido">Saltar al contenido</a>
 <?php echo partial('partials/header'); ?>
 <main id="contenido">
 <?php echo $content; ?>
 </main>
 <?php echo partial('partials/footer'); ?>
-<?php echo partial('partials/floating'); ?>
+<?php echo partial('partials/dock'); ?>
 <script src="<?php echo asset('js/site.min.js'); ?>" defer></script>
 </body>
 </html>

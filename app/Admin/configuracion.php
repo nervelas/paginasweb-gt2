@@ -46,13 +46,12 @@ return [
     ],
     'marca' => [
         'titulo' => 'Colores de la marca',
-        'nota'   => 'Se aplican en todo el sitio. Conviene mantener buen contraste: el texto sobre el color de fondo debe cumplir al menos la relación 4.5:1.',
+        'nota'   => 'El sitio alterna dos lienzos (uno oscuro y uno claro) y usa un solo color de señal. Si cambiás los colores, revisá el contraste: el texto debe cumplir al menos 4.5:1 sobre su fondo.',
         'campos' => [
-            'color_ink'    => ['tipo' => 'color', 'etiqueta' => 'Color oscuro principal'],
-            'color_brand'  => ['tipo' => 'color', 'etiqueta' => 'Color de marca'],
-            'color_accent' => ['tipo' => 'color', 'etiqueta' => 'Color de acento (botones)'],
-            'color_paper'  => ['tipo' => 'color', 'etiqueta' => 'Color de fondo'],
-            'color_gold'   => ['tipo' => 'color', 'etiqueta' => 'Color secundario'],
+            'color_ink'       => ['tipo' => 'color', 'etiqueta' => 'Lienzo oscuro', 'ayuda' => 'Fondo de la cabecera, el hero y el pie.'],
+            'color_paper'     => ['tipo' => 'color', 'etiqueta' => 'Lienzo claro', 'ayuda' => 'Fondo de las secciones de contenido.'],
+            'color_brand'     => ['tipo' => 'color', 'etiqueta' => 'Color de señal', 'ayuda' => 'Se usa sobre el lienzo oscuro: botones, acentos y marcas.'],
+            'color_brand_ink' => ['tipo' => 'color', 'etiqueta' => 'Señal sobre fondo claro', 'ayuda' => 'Versión oscura del color de señal, para que se lea sobre el lienzo claro.'],
         ],
     ],
     'analitica' => [

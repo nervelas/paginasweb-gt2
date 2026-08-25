@@ -1,23 +1,24 @@
 <?php
 use App\Models\Content;
-$groups = isset($section['extra']['groups']) ? $section['extra']['groups'] : [];
+$grupos = isset($section['extra']['groups']) ? $section['extra']['groups'] : [];
+$i = 0;
 ?>
-<section class="section section--tight">
-  <div class="wrap wrap-narrow">
-    <?php foreach ($groups as $group):
-      $items = Content::faqs($group['slug']);
-      if (!$items) { continue; } ?>
-    <div class="faq-group reveal">
-      <h2><?php echo e($group['title']); ?></h2>
-      <div class="faq-list" data-faq-group>
-        <?php foreach ($items as $faq): ?>
-        <details class="faq-item">
-          <summary><?php echo e($faq['question']); ?></summary>
-          <div class="faq-answer"><?php echo $faq['answer']; ?></div>
-        </details>
-        <?php endforeach; ?>
-      </div>
+<?php echo partial('partials/band-open', ['lienzo' => 'bone', 'tight' => true]); ?>
+  <?php foreach ($grupos as $g):
+    $items = Content::faqs($g['slug']);
+    if (!$items) { continue; }
+    $i++; ?>
+  <div class="qa__group rise">
+    <p class="tag" data-num="<?php echo str_pad((string) $i, 2, '0', STR_PAD_LEFT); ?>">Bloque</p>
+    <h2><?php echo e($g['title']); ?></h2>
+    <div class="qa" data-accordion>
+      <?php foreach ($items as $f): ?>
+      <details class="qa__item">
+        <summary><?php echo e($f['question']); ?></summary>
+        <div class="qa__answer"><?php echo $f['answer']; ?></div>
+      </details>
+      <?php endforeach; ?>
     </div>
-    <?php endforeach; ?>
   </div>
-</section>
+  <?php endforeach; ?>
+<?php echo partial('partials/band-close'); ?>

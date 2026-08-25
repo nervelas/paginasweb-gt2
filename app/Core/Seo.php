@@ -37,9 +37,9 @@ class Seo
             'url'         => \base_url(),
             'logo'        => [
                 '@type'  => 'ImageObject',
-                'url'    => \base_url('assets/img/logo-paginasweb-gt.svg'),
-                'width'  => 320,
-                'height' => 64,
+                'url'    => \base_url('assets/img/icons/marca-cuadrada.svg'),
+                'width'  => 512,
+                'height' => 512,
             ],
             'email'       => Settings::get('email'),
             'telephone'   => Settings::get('phone_e164'),

@@ -1,14 +1,17 @@
 <?php $items = isset($section['extra']['items']) ? $section['extra']['items'] : []; ?>
 <?php if ($items): ?>
-<section class="section--tight reveal" style="padding-block:0 var(--step)">
+<section class="band--dark" style="padding:clamp(52px,7vw,96px) 0 clamp(56px,7vw,96px)">
   <div class="wrap">
-    <div class="stats">
-      <?php foreach ($items as $item): ?>
-      <div class="stats__item">
-        <span class="stats__value"><?php echo e($item['value']); ?></span>
-        <span class="stats__label"><?php echo e($item['label']); ?></span>
+    <div class="spec rise">
+      <div class="spec__row">
+        <?php foreach ($items as $i): ?>
+        <div class="spec__cell">
+          <span class="spec__k">Dato</span>
+          <span class="spec__v"><?php echo e($i['value']); ?></span>
+          <span class="spec__d"><?php echo e($i['label']); ?></span>
+        </div>
+        <?php endforeach; ?>
       </div>
-      <?php endforeach; ?>
     </div>
   </div>
 </section>

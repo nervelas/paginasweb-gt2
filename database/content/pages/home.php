@@ -16,8 +16,8 @@ return [
             'subheading' => 'Diseñamos el sitio que tu negocio necesita para dejar de explicar lo mismo por mensaje: qué vendés, por qué valés lo que cobrás y cómo te contactan. Con dominio, alojamiento y soporte incluidos, desde Q1,250 al año.',
             'cta_text'   => 'Cotizar por WhatsApp',
             'cta_url'    => 'whatsapp',
-            'image'      => '/assets/img/hero-sitio-en-celular-y-laptop.webp',
-            'image_alt'  => 'Sitio web guatemalteco mostrado en una laptop y en un celular',
+            'image'      => '/assets/img/hero-estudio.webp',
+            'image_alt'  => 'Composición de un sitio de paginasweb.gt en computadora y en celular',
             'extra'      => [
                 'accent'    => 'que sí traen clientes',
                 'cta2_text' => 'Ver precios',

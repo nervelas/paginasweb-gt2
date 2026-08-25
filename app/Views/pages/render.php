@@ -1,22 +1,48 @@
 <?php
 /**
- * Renderiza una página a partir de sus secciones.
- * Cada bloque tiene su propia plantilla en app/Views/sections/.
+ * Compone una página a partir de sus secciones.
+ * El lienzo (oscuro / hueso) se asigna por tipo de bloque para que el ritmo
+ * de la página alterne solo; cuando dos secciones seguidas comparten lienzo
+ * se dibuja una regla capilar entre ellas.
  */
-echo partial('partials/breadcrumbs', ['crumbs' => $crumbs]);
+$lienzos = [
+    'hero'            => 'propio',
+    'page_hero'       => 'propio',
+    'cta'             => 'propio',
+    'stats'           => 'dark',
+    'features'        => 'dark',
+    'portfolio_grid'  => 'dark',
+    'posts_grid'      => 'dark',
+    'process'         => 'bone-2',
+    'comparison'      => 'bone-2',
+    'faq'             => 'bone-2',
+];
 
-$fondos = ['white' => false];
-$index  = 0;
-foreach ($sections as $section) {
-    $tpl = APP_PATH . '/Views/sections/' . $section['block_type'] . '.php';
-    if (!is_file($tpl)) {
+echo partial('partials/crumbs', ['crumbs' => $crumbs]);
+
+$previo  = null;
+$numero  = 0;
+
+foreach ($sections as $seccion) {
+    $tipo = $seccion['block_type'];
+    if (!is_file(APP_PATH . '/Views/sections/' . $tipo . '.php')) {
         continue;
     }
-    echo partial('sections/' . $section['block_type'], [
-        'section' => $section,
+    $lienzo = isset($lienzos[$tipo]) ? $lienzos[$tipo] : 'bone';
+
+    // Numeración visible solo en los bloques que llevan encabezado propio
+    if (!in_array($tipo, ['hero', 'page_hero', 'cta', 'stats', 'legal_text'], true)) {
+        $numero++;
+    }
+
+    echo partial('sections/' . $tipo, [
+        'section' => $seccion,
         'page'    => $page,
         'faqs'    => isset($faqs) ? $faqs : [],
-        'index'   => $index,
+        'lienzo'  => $lienzo,
+        'regla'   => ($lienzo !== 'propio' && $lienzo === $previo),
+        'n'       => str_pad((string) $numero, 2, '0', STR_PAD_LEFT),
     ]);
-    $index++;
+
+    $previo = $lienzo;
 }

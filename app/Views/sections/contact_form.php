@@ -3,128 +3,114 @@ use App\Core\Csrf;
 use App\Core\Settings;
 use App\Models\Content;
 
-$errors = isset($_SESSION['_form_errors']) ? $_SESSION['_form_errors'] : [];
-$old    = isset($_SESSION['_old']) ? $_SESSION['_old'] : [];
-$msg    = flash();
+$errores = isset($_SESSION['_form_errors']) ? $_SESSION['_form_errors'] : [];
+$viejo   = isset($_SESSION['_old']) ? $_SESSION['_old'] : [];
+$aviso   = flash();
 unset($_SESSION['_form_errors'], $_SESSION['_old']);
-$val = function ($key) use ($old) { return isset($old[$key]) ? $old[$key] : ''; };
+$v = function ($k) use ($viejo) { return isset($viejo[$k]) ? $viejo[$k] : ''; };
 $servicios = Content::services();
 ?>
-<section class="section section--tight" id="formulario">
-  <div class="wrap">
-    <div class="grid grid--2" style="gap:34px;align-items:start">
-      <div class="form-card">
-        <h2 style="font-size:clamp(1.35rem,2.6vw,1.75rem)"><?php echo e($section['heading']); ?></h2>
-        <?php if ($section['subheading']): ?><p class="sub" style="margin-bottom:1.5rem"><?php echo e($section['subheading']); ?></p><?php endif; ?>
+<?php echo partial('partials/band-open', ['lienzo' => 'bone', 'id' => 'formulario']); ?>
+  <div class="form-grid">
+    <div class="rise">
+      <p class="tag" data-num="<?php echo e($n); ?>">Cotización</p>
+      <h2 style="font-size:clamp(1.8rem,3.4vw,2.7rem)"><?php echo e($section['heading']); ?></h2>
+      <?php if ($section['subheading']): ?>
+      <p class="lede" style="margin-bottom:clamp(30px,4vw,46px)"><?php echo e($section['subheading']); ?></p>
+      <?php endif; ?>
 
-        <?php if ($msg): ?>
-        <div class="alert alert--<?php echo $msg['type'] === 'error' ? 'error' : 'ok'; ?>" role="status">
-          <?php echo e($msg['message']); ?>
+      <?php if ($aviso): ?>
+      <div class="note note--<?php echo $aviso['type'] === 'error' ? 'bad' : 'ok'; ?>" role="status">
+        <?php echo e($aviso['message']); ?>
+      </div>
+      <?php endif; ?>
+
+      <form method="post" action="/contacto/" novalidate>
+        <?php echo Csrf::field(); ?>
+        <input type="hidden" name="page" value="<?php echo e(isset($currentPath) ? $currentPath : '/contacto/'); ?>">
+        <div class="hp" aria-hidden="true">
+          <label for="website">No llenar este campo</label>
+          <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
         </div>
-        <?php endif; ?>
 
-        <form method="post" action="/contacto/" novalidate>
-          <?php echo Csrf::field(); ?>
-          <input type="hidden" name="page" value="<?php echo e(isset($currentPath) ? $currentPath : '/contacto/'); ?>">
-          <div class="hp-field" aria-hidden="true">
-            <label for="website">No llenar este campo</label>
-            <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+        <div class="field-pair">
+          <div class="field<?php echo isset($errores['name']) ? ' bad' : ''; ?>">
+            <label for="f-nombre">Nombre <i>· obligatorio</i></label>
+            <input type="text" name="name" id="f-nombre" value="<?php echo e($v('name')); ?>" required autocomplete="name"
+              <?php echo isset($errores['name']) ? 'aria-describedby="e-nombre" aria-invalid="true"' : ''; ?>>
+            <?php if (isset($errores['name'])): ?><span class="err" id="e-nombre"><?php echo e($errores['name']); ?></span><?php endif; ?>
           </div>
-
-          <div class="field-row">
-            <div class="field<?php echo isset($errors['name']) ? ' has-error' : ''; ?>">
-              <label for="campo-nombre">Nombre <span class="hint">(obligatorio)</span></label>
-              <input type="text" name="name" id="campo-nombre" value="<?php echo e($val('name')); ?>"
-                     required autocomplete="name"
-                     <?php echo isset($errors['name']) ? 'aria-describedby="err-nombre" aria-invalid="true"' : ''; ?>>
-              <?php if (isset($errors['name'])): ?><span class="error" id="err-nombre"><?php echo e($errors['name']); ?></span><?php endif; ?>
-            </div>
-            <div class="field<?php echo isset($errors['email']) ? ' has-error' : ''; ?>">
-              <label for="campo-correo">Correo <span class="hint">(obligatorio)</span></label>
-              <input type="email" name="email" id="campo-correo" value="<?php echo e($val('email')); ?>"
-                     required autocomplete="email"
-                     <?php echo isset($errors['email']) ? 'aria-describedby="err-correo" aria-invalid="true"' : ''; ?>>
-              <?php if (isset($errors['email'])): ?><span class="error" id="err-correo"><?php echo e($errors['email']); ?></span><?php endif; ?>
-            </div>
+          <div class="field<?php echo isset($errores['email']) ? ' bad' : ''; ?>">
+            <label for="f-correo">Correo <i>· obligatorio</i></label>
+            <input type="email" name="email" id="f-correo" value="<?php echo e($v('email')); ?>" required autocomplete="email"
+              <?php echo isset($errores['email']) ? 'aria-describedby="e-correo" aria-invalid="true"' : ''; ?>>
+            <?php if (isset($errores['email'])): ?><span class="err" id="e-correo"><?php echo e($errores['email']); ?></span><?php endif; ?>
           </div>
+        </div>
 
-          <div class="field-row">
-            <div class="field<?php echo isset($errors['phone']) ? ' has-error' : ''; ?>">
-              <label for="campo-telefono">Teléfono o WhatsApp <span class="hint">(opcional)</span></label>
-              <input type="tel" name="phone" id="campo-telefono" value="<?php echo e($val('phone')); ?>" autocomplete="tel">
-              <?php if (isset($errors['phone'])): ?><span class="error"><?php echo e($errors['phone']); ?></span><?php endif; ?>
-            </div>
-            <div class="field">
-              <label for="campo-servicio">¿Qué necesitás?</label>
-              <select name="service" id="campo-servicio">
-                <option value="">Elegí una opción</option>
-                <?php foreach ($servicios as $s): ?>
-                <option value="<?php echo e($s['slug']); ?>"<?php echo $val('service') === $s['slug'] ? ' selected' : ''; ?>>
-                  <?php echo e($s['name']); ?>
-                </option>
-                <?php endforeach; ?>
-                <option value="otro"<?php echo $val('service') === 'otro' ? ' selected' : ''; ?>>Otra consulta</option>
-              </select>
-            </div>
+        <div class="field-pair">
+          <div class="field<?php echo isset($errores['phone']) ? ' bad' : ''; ?>">
+            <label for="f-telefono">Teléfono o WhatsApp <i>· opcional</i></label>
+            <input type="tel" name="phone" id="f-telefono" value="<?php echo e($v('phone')); ?>" autocomplete="tel">
+            <?php if (isset($errores['phone'])): ?><span class="err"><?php echo e($errores['phone']); ?></span><?php endif; ?>
           </div>
-
-          <div class="field<?php echo isset($errors['message']) ? ' has-error' : ''; ?>">
-            <label for="campo-mensaje">Contanos de tu negocio <span class="hint">(obligatorio)</span></label>
-            <textarea name="message" id="campo-mensaje" required
-                      placeholder="A qué te dedicás, qué querés lograr con el sitio y si ya tenés dominio o material."
-                      <?php echo isset($errors['message']) ? 'aria-describedby="err-mensaje" aria-invalid="true"' : ''; ?>><?php echo e($val('message')); ?></textarea>
-            <?php if (isset($errors['message'])): ?><span class="error" id="err-mensaje"><?php echo e($errors['message']); ?></span><?php endif; ?>
+          <div class="field">
+            <label for="f-servicio">Qué necesitás</label>
+            <select name="service" id="f-servicio">
+              <option value="">Elegí una opción</option>
+              <?php foreach ($servicios as $s): ?>
+              <option value="<?php echo e($s['slug']); ?>"<?php echo $v('service') === $s['slug'] ? ' selected' : ''; ?>>
+                <?php echo e($s['name']); ?>
+              </option>
+              <?php endforeach; ?>
+              <option value="otro"<?php echo $v('service') === 'otro' ? ' selected' : ''; ?>>Otra consulta</option>
+            </select>
           </div>
+        </div>
 
-          <button type="submit" class="btn btn--primary btn--block">Enviar solicitud</button>
-          <p class="form-legal">
-            Usamos tus datos únicamente para responderte. Podés leer nuestra
-            <a href="/politica-de-privacidad/">política de privacidad</a>.
-          </p>
-        </form>
-      </div>
+        <div class="field<?php echo isset($errores['message']) ? ' bad' : ''; ?>">
+          <label for="f-mensaje">Contanos de tu negocio <i>· obligatorio</i></label>
+          <textarea name="message" id="f-mensaje" required
+            placeholder="A qué te dedicás, qué querés lograr con el sitio y si ya tenés dominio o material."
+            <?php echo isset($errores['message']) ? 'aria-describedby="e-mensaje" aria-invalid="true"' : ''; ?>><?php echo e($v('message')); ?></textarea>
+          <?php if (isset($errores['message'])): ?><span class="err" id="e-mensaje"><?php echo e($errores['message']); ?></span><?php endif; ?>
+        </div>
 
-      <div>
-        <h2 style="font-size:clamp(1.35rem,2.6vw,1.75rem)">O escribinos directo</h2>
-        <p class="sub" style="margin-bottom:1.6rem">Si preferís hablarlo, WhatsApp es lo más rápido.</p>
-        <ul class="contact-list">
-          <li>
-            <span class="ic"><?php echo partial('partials/icon', ['name' => 'whatsapp', 'size' => 18]); ?></span>
-            <div>
-              <strong>WhatsApp</strong>
-              <a href="<?php echo e(Settings::whatsappLink()); ?>" rel="noopener"><?php echo telefono_html(Settings::get('phone_display')); ?></a>
-            </div>
-          </li>
-          <li>
-            <span class="ic"><?php echo partial('partials/icon', ['name' => 'phone', 'size' => 18]); ?></span>
-            <div>
-              <strong>Teléfono</strong>
-              <a href="<?php echo e(Settings::telLink()); ?>"><?php echo telefono_html(Settings::get('phone_display')); ?></a>
-            </div>
-          </li>
-          <li>
-            <span class="ic"><?php echo partial('partials/icon', ['name' => 'mail', 'size' => 18]); ?></span>
-            <div>
-              <strong>Correo</strong>
-              <a href="mailto:<?php echo e(Settings::get('email')); ?>"><?php echo e(Settings::get('email')); ?></a>
-            </div>
-          </li>
-          <li>
-            <span class="ic"><?php echo partial('partials/icon', ['name' => 'clock', 'size' => 18]); ?></span>
-            <div>
-              <strong>Horario</strong>
-              <span style="font-weight:600"><?php echo e(Settings::get('opening_hours')); ?></span>
-            </div>
-          </li>
-          <li>
-            <span class="ic"><?php echo partial('partials/icon', ['name' => 'pin', 'size' => 18]); ?></span>
-            <div>
-              <strong>Cobertura</strong>
-              <span style="font-weight:600">Toda Guatemala, 100% en línea</span>
-            </div>
-          </li>
-        </ul>
-      </div>
+        <button type="submit" class="btn btn--block">
+          Enviar solicitud
+          <?php echo partial('partials/icon', ['name' => 'flecha', 'size' => 15]); ?>
+        </button>
+        <p class="form-note">
+          Usamos tus datos únicamente para responderte. Podés leer nuestra
+          <a class="link" href="/politica-de-privacidad/">política de privacidad</a>.
+        </p>
+      </form>
     </div>
+
+    <aside class="rise rise-d1">
+      <p class="tag tag--plain">Directo</p>
+      <ul class="contact-list">
+        <li>
+          <span class="k">WhatsApp</span>
+          <a class="v" href="<?php echo e(Settings::whatsappLink()); ?>" rel="noopener"><?php echo telefono_html(Settings::get('phone_display')); ?></a>
+        </li>
+        <li>
+          <span class="k">Teléfono</span>
+          <a class="v" href="<?php echo e(Settings::telLink()); ?>"><?php echo telefono_html(Settings::get('phone_display')); ?></a>
+        </li>
+        <li>
+          <span class="k">Correo</span>
+          <a class="v" href="mailto:<?php echo e(Settings::get('email')); ?>"><?php echo e(Settings::get('email')); ?></a>
+        </li>
+        <li>
+          <span class="k">Horario</span>
+          <span class="v"><?php echo e(Settings::get('opening_hours')); ?></span>
+        </li>
+        <li>
+          <span class="k">Cobertura</span>
+          <span class="v">Toda Guatemala, 100% en línea</span>
+        </li>
+      </ul>
+    </aside>
   </div>
-</section>
+<?php echo partial('partials/band-close'); ?>

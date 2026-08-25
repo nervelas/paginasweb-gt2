@@ -1,7 +1,8 @@
 <?php
 /**
- * Genera las imágenes del sitio: mockups del portafolio, imagen del hero
- * e imágenes para redes sociales (Open Graph).
+ * Genera las imágenes del sitio en la dirección "Taller editorial":
+ * láminas tipográficas para el portafolio, la composición del hero y las
+ * portadas para redes sociales.
  *
  * Composición en HTML → captura con Chromium → conversión a WebP con GD.
  * Todo el material es original; no se usan fotografías ni capturas de terceros.
@@ -26,51 +27,66 @@ if (!$chrome || !is_file($chrome)) {
 
 $tmp = sys_get_temp_dir() . '/pwgt-img';
 @mkdir($tmp, 0777, true);
-@mkdir($root . '/public/assets/img/portafolio', 0755, true);
-@mkdir($root . '/public/assets/img/og', 0755, true);
-@mkdir($root . '/public/assets/img/icons', 0755, true);
-
-$FUENTE_M = 'file://' . $root . '/public/assets/fonts/manrope-latin-wght.woff2';
-$FUENTE_F = 'file://' . $root . '/public/assets/fonts/fraunces-latin-wght.woff2';
-$LOGO     = 'file://' . $root . '/public/assets/img/logo-paginasweb-gt.svg';
-$LOGO_B   = 'file://' . $root . '/public/assets/img/logo-paginasweb-gt-blanco.svg';
-
-/** Paleta derivada del dominio: cada proyecto tiene su propio matiz, estable. */
-function paleta($semilla)
-{
-    $h = abs(crc32($semilla)) % 360;
-    return [
-        'h'   => $h,
-        'bg'  => "hsl({$h}, 34%, 22%)",
-        'bg2' => "hsl(" . (($h + 34) % 360) . ", 40%, 34%)",
-        'ac'  => "hsl(" . (($h + 26) % 360) . ", 78%, 58%)",
-        'sf'  => "hsl({$h}, 26%, 96%)",
-    ];
+foreach (['portafolio', 'og', 'icons', 'blog'] as $d) {
+    @mkdir($root . '/public/assets/img/' . $d, 0755, true);
 }
 
-function base_css($fm, $ff)
+$SERIF = 'file://' . $root . '/public/assets/fonts/instrument-serif-400.woff2';
+$SANS  = 'file://' . $root . '/public/assets/fonts/geist-wght.woff2';
+$MONO  = 'file://' . $root . '/public/assets/fonts/geist-mono-wght.woff2';
+$MARCA = 'file://' . $root . '/public/assets/img/marca-blanca.svg';
+
+const OBSIDIAN = '#0A0C0F';
+const BONE     = '#F3F0E9';
+const QUETZAL  = '#11E39A';
+
+function base_css($serif, $sans, $mono)
 {
     return "
-    @font-face{font-family:M;src:url('{$fm}') format('woff2-variations');font-weight:200 800}
-    @font-face{font-family:F;src:url('{$ff}') format('woff2-variations');font-weight:300 900}
+    @font-face{font-family:S;src:url('{$serif}') format('woff2')}
+    @font-face{font-family:G;src:url('{$sans}') format('woff2-variations');font-weight:100 900}
+    @font-face{font-family:M;src:url('{$mono}') format('woff2-variations');font-weight:100 900}
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:M,sans-serif;-webkit-font-smoothing:antialiased}
+    body{font-family:G,sans-serif;-webkit-font-smoothing:antialiased;background:" . OBSIDIAN . ";color:" . BONE . "}
+    .grano{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
+      background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E\")}
     ";
 }
 
-/** Captura una página HTML y devuelve la ruta del PNG. */
-function capturar($chrome, $html, $destino, $w, $h, $escala = 1)
+/** Captura una página HTML y devuelve true si escribió el PNG. */
+function capturar($chrome, $html, $destino, $w, $h)
 {
     $tmpFile = tempnam(sys_get_temp_dir(), 'pwgt') . '.html';
     file_put_contents($tmpFile, $html);
     $cmd = escapeshellcmd($chrome) . ' --headless --no-sandbox --disable-gpu --hide-scrollbars'
-        . ' --force-device-scale-factor=' . $escala
         . ' --screenshot=' . escapeshellarg($destino)
         . ' --window-size=' . (int) $w . ',' . (int) $h
         . ' ' . escapeshellarg('file://' . $tmpFile) . ' 2>/dev/null';
     exec($cmd, $out, $ret);
     @unlink($tmpFile);
     return is_file($destino);
+}
+
+/**
+ * Captura con altura de sobra y recorta al tamaño exacto.
+ * Chromium headless entrega un viewport algo más corto que el pedido, así que
+ * se le da margen y luego se recorta: así ningún elemento queda cortado.
+ */
+function capturar_exacto($chrome, $html, $destino, $w, $h)
+{
+    $bruto = $destino . '.bruto.png';
+    if (!capturar($chrome, $html, $bruto, $w, (int) ceil($h * 1.35) + 60)) {
+        return false;
+    }
+    $img = @imagecreatefrompng($bruto);
+    if (!$img) { @unlink($bruto); return false; }
+    $rec = imagecreatetruecolor($w, $h);
+    imagecopy($rec, $img, 0, 0, 0, 0, $w, $h);
+    imagepng($rec, $destino);
+    imagedestroy($img);
+    imagedestroy($rec);
+    @unlink($bruto);
+    return true;
 }
 
 /** Convierte un PNG a WebP (o a JPG si el servidor no soporta WebP). */
@@ -88,264 +104,231 @@ function a_webp($png, $webp, $calidad = 82)
     return $ok;
 }
 
+/** Matiz estable derivado del dominio: cada proyecto tiene su tono propio. */
+function matiz($semilla)
+{
+    return abs(crc32($semilla)) % 360;
+}
+
 // ------------------------------------------------------------------------
-// 1. Mockups del portafolio
+// 1. Láminas del portafolio
 // ------------------------------------------------------------------------
 $proyectos = require $root . '/database/content/portfolio.php';
-echo "Mockups del portafolio (" . count($proyectos) . "):\n";
+echo "Láminas del portafolio (" . count($proyectos) . "):\n";
+$css = base_css($SERIF, $SANS, $MONO);
 
-foreach ($proyectos as $p) {
-    $slug = str_replace('.', '-', $p['domain']);
-    $c = paleta($p['domain']);
-    $inicial = mb_strtoupper(mb_substr($p['name'], 0, 1));
+foreach ($proyectos as $i => $p) {
+    $slug   = str_replace('.', '-', $p['domain']);
+    $h      = matiz($p['domain']);
     $nombre = htmlspecialchars($p['name'], ENT_QUOTES);
-    $dominio = htmlspecialchars($p['domain'], ENT_QUOTES);
-    $sector = htmlspecialchars($p['sector'], ENT_QUOTES);
-    $css = base_css($FUENTE_M, $FUENTE_F);
+    $dom    = htmlspecialchars($p['domain'], ENT_QUOTES);
+    $sector = htmlspecialchars(mb_strtoupper($p['sector']), ENT_QUOTES);
+    $num    = str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT);
+    $largo  = mb_strlen($p['name']);
+    $tam    = $largo > 20 ? 46 : ($largo > 14 ? 58 : 72);
 
     $html = <<<HTML
 <!doctype html><html><head><meta charset="utf-8"><style>
 {$css}
-body{width:640px;height:400px;background:linear-gradient(145deg,{$c['bg']},{$c['bg2']});
-  display:grid;place-items:center;overflow:hidden}
-.win{width:530px;background:#fff;border-radius:11px;overflow:hidden;
-  box-shadow:0 26px 60px rgba(0,0,0,.34),0 4px 12px rgba(0,0,0,.2);transform:translateY(14px)}
-.bar{height:31px;background:#EDECE9;display:flex;align-items:center;gap:6px;padding:0 12px;border-bottom:1px solid #DEDCD7}
-.dot{width:8px;height:8px;border-radius:50%}
-.url{flex:1;margin-left:8px;height:17px;background:#fff;border-radius:9px;display:flex;align-items:center;
-  padding:0 9px;font-size:9px;color:#6B7F87;font-weight:600;letter-spacing:.01em}
-.lock{width:6px;height:7px;border:1.4px solid #12796B;border-bottom:none;border-radius:2px 2px 0 0;margin-right:5px}
-.page{height:262px;background:#fff;position:relative;overflow:hidden}
-.nav{height:34px;display:flex;align-items:center;padding:0 18px;gap:7px;border-bottom:1px solid #F0EEEA}
-.mark{width:17px;height:17px;border-radius:5px;background:{$c['bg']};color:#fff;font-size:9px;font-weight:800;
-  display:grid;place-items:center}
-.brand{font-size:9.5px;font-weight:800;color:#1B2A33;letter-spacing:-.01em}
-.links{margin-left:auto;display:flex;gap:9px}
-.links i{display:block;width:23px;height:4px;border-radius:2px;background:#DDE3E6}
-.btn{width:38px;height:12px;border-radius:6px;background:{$c['ac']}}
-.hero{padding:20px 18px 0;display:grid;grid-template-columns:1fr 106px;gap:14px;align-items:center}
-.h1{font-size:15px;font-weight:800;line-height:1.18;color:#12202A;letter-spacing:-.02em}
-.h1 em{font-style:normal;color:{$c['bg']}}
-.p{margin-top:6px;display:grid;gap:3.5px}
-.p i{display:block;height:4px;border-radius:2px;background:#E4E9EC}
-.p i:nth-child(2){width:88%}.p i:nth-child(3){width:64%}
-.cta{margin-top:10px;display:flex;gap:6px}
-.cta b{display:block;width:56px;height:15px;border-radius:8px;background:{$c['ac']}}
-.cta s{display:block;width:44px;height:15px;border-radius:8px;border:1.3px solid #D8DEE1}
-.shape{height:82px;border-radius:9px;background:linear-gradient(150deg,{$c['bg']},{$c['bg2']});
-  display:grid;place-items:center;color:#fff;font-family:F;font-size:30px;font-weight:600}
-.cards{margin-top:16px;padding:0 18px;display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.card{background:{$c['sf']};border-radius:7px;padding:9px}
-.card u{display:block;width:15px;height:15px;border-radius:4px;background:{$c['bg']};opacity:.85;margin-bottom:6px}
-.card i{display:block;height:3.5px;border-radius:2px;background:#D9E0E4;margin-bottom:3.5px}
-.card i:last-child{width:62%}
-.tag{position:absolute;left:0;right:0;bottom:0;padding:6px 18px;background:{$c['bg']};color:#fff;
-  font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;opacity:.95}
+body{width:640px;height:400px;position:relative;overflow:hidden}
+.tinte{position:absolute;inset:0;background:
+  radial-gradient(120% 90% at 82% 8%, hsla({$h},62%,42%,.30) 0%, transparent 58%),
+  radial-gradient(80% 70% at 10% 100%, hsla(160,70%,45%,.10) 0%, transparent 60%)}
+.marco{position:absolute;inset:22px;border:1px solid rgba(243,240,233,.16)}
+.esq{position:absolute;width:11px;height:11px;border:0 solid rgba(17,227,154,.85)}
+.e1{top:22px;left:22px;border-top-width:1px;border-left-width:1px}
+.e2{bottom:22px;right:22px;border-bottom-width:1px;border-right-width:1px}
+.in{position:absolute;inset:22px;padding:26px 30px;display:flex;flex-direction:column;justify-content:space-between}
+.top{display:flex;justify-content:space-between;align-items:baseline;
+  font-family:M;font-size:9.5px;letter-spacing:.19em;color:rgba(243,240,233,.5)}
+.top .n{color:{QUETZAL}}
+.nombre{font-family:S;font-size:{$tam}px;line-height:.98;letter-spacing:-.03em;max-width:11ch}
+.linea{height:1px;background:rgba(243,240,233,.16);margin:16px 0 14px}
+.pie{display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
+.dom{font-family:M;font-size:11px;letter-spacing:.1em;color:rgba(243,240,233,.72)}
+.barras{display:flex;gap:4px;align-items:flex-end;height:26px}
+.barras i{display:block;width:4px;background:rgba(17,227,154,.55)}
 </style></head><body>
-<div class="win">
-  <div class="bar">
-    <span class="dot" style="background:#FF5F57"></span>
-    <span class="dot" style="background:#FEBC2E"></span>
-    <span class="dot" style="background:#28C840"></span>
-    <span class="url"><span class="lock"></span>{$dominio}</span>
-  </div>
-  <div class="page">
-    <div class="nav">
-      <span class="mark">{$inicial}</span>
-      <span class="brand">{$nombre}</span>
-      <span class="links"><i></i><i></i><i></i></span>
-      <span class="btn"></span>
+<span class="tinte"></span><span class="grano"></span>
+<span class="marco"></span><span class="esq e1"></span><span class="esq e2"></span>
+<div class="in">
+  <div class="top"><span class="n">{$num}</span><span>{$sector}</span></div>
+  <div>
+    <div class="nombre">{$nombre}</div>
+    <div class="linea"></div>
+    <div class="pie">
+      <span class="dom">{$dom}</span>
+      <span class="barras"><i style="height:9px"></i><i style="height:17px"></i><i style="height:12px"></i><i style="height:24px"></i></span>
     </div>
-    <div class="hero">
-      <div>
-        <div class="h1">{$nombre}<br><em>{$sector}</em></div>
-        <div class="p"><i></i><i></i><i></i></div>
-        <div class="cta"><b></b><s></s></div>
-      </div>
-      <div class="shape">{$inicial}</div>
-    </div>
-    <div class="cards">
-      <div class="card"><u></u><i></i><i></i></div>
-      <div class="card"><u></u><i></i><i></i></div>
-      <div class="card"><u></u><i></i><i></i></div>
-    </div>
-    <div class="tag">{$sector}</div>
   </div>
 </div>
 </body></html>
 HTML;
+    $html = str_replace('{QUETZAL}', QUETZAL, $html);
 
     $png  = $tmp . '/' . $slug . '.png';
     $webp = $root . '/public/assets/img/portafolio/' . $slug . '.webp';
-    if (capturar($chrome, $html, $png, 640, 400, 1) && a_webp($png, $webp, 80)) {
+    if (capturar_exacto($chrome, $html, $png, 640, 400) && a_webp($png, $webp, 80)) {
         echo '  ' . str_pad($slug, 34) . ' ' . round(filesize($webp) / 1024) . " KB\n";
     } else {
         echo "  FALLÓ: {$slug}\n";
     }
 }
 
-echo "Listo.\n";
-
 // ------------------------------------------------------------------------
-// 2. Imagen del hero: laptop y celular con un sitio de nuestro estilo
+// 2. Composición del hero
 // ------------------------------------------------------------------------
-echo "\nImagen del hero:\n";
-$css = base_css($FUENTE_M, $FUENTE_F);
+echo "\nComposición del hero:\n";
+$css = base_css($SERIF, $SANS, $MONO);
 $heroHtml = <<<HTML
 <!doctype html><html><head><meta charset="utf-8"><style>
 {$css}
 html{zoom:2}
-body{width:720px;height:540px;background:linear-gradient(150deg,#EAF2F0 0%,#F7F3EC 52%,#FDEEE6 100%);
-  position:relative;overflow:hidden}
-body::before{content:'';position:absolute;width:420px;height:420px;border-radius:50%;
-  background:radial-gradient(circle,rgba(18,121,107,.16),transparent 68%);top:-120px;right:-90px}
-body::after{content:'';position:absolute;width:340px;height:340px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,122,69,.18),transparent 66%);bottom:-110px;left:-80px}
-.escena{position:absolute;inset:0;display:grid;place-items:center}
-.laptop{position:relative;width:540px;transform:translate(-18px,-16px)}
-.pantalla{background:#0A1F2C;border-radius:14px 14px 5px 5px;padding:11px 11px 15px;
-  box-shadow:0 30px 60px rgba(10,31,44,.26),0 8px 20px rgba(10,31,44,.16)}
-.viewport{background:#F7F3EC;border-radius:6px;height:312px;overflow:hidden;position:relative}
-.base{height:11px;background:linear-gradient(#CFD6D9,#A8B5BA);border-radius:0 0 12px 12px;
-  width:640px;margin:0 auto;position:relative;left:-50px}
-.base::after{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);
-  width:78px;height:4px;background:#8E9DA4;border-radius:0 0 5px 5px}
-.top{height:34px;display:flex;align-items:center;padding:0 18px;gap:8px;background:#F7F3EC;
-  border-bottom:1px solid #E7E0D4}
-.logo{height:15px}
-.menu{margin-left:auto;display:flex;gap:10px;align-items:center}
-.menu i{display:block;width:28px;height:4.5px;border-radius:3px;background:#CBD4D8}
-.menu b{display:block;width:56px;height:16px;border-radius:9px;background:#FF7A45}
-.contenido{padding:20px 20px 0;display:grid;grid-template-columns:1fr 150px;gap:16px;align-items:center}
-.titulo{font-family:F;font-size:22px;font-weight:600;line-height:1.13;color:#0A1F2C;letter-spacing:-.025em}
-.titulo em{font-style:italic;color:#0B5347;display:block}
-.parrafo{margin-top:9px;display:grid;gap:4.5px}
-.parrafo i{display:block;height:5px;border-radius:3px;background:#DCE3E1}
-.parrafo i:nth-child(2){width:86%}.parrafo i:nth-child(3){width:58%}
-.acciones{margin-top:13px;display:flex;gap:8px}
-.acciones b{display:block;width:86px;height:21px;border-radius:11px;background:#FF7A45}
-.acciones s{display:block;width:64px;height:21px;border-radius:11px;border:1.6px solid #DFD8CC}
-.grafico{height:120px;border-radius:11px;background:linear-gradient(150deg,#12796B,#0B5347);
-  display:grid;place-items:center;box-shadow:0 12px 24px rgba(11,83,71,.28)}
-.grafico span{width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.94)}
-.tarjetas{margin-top:18px;padding:0 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.t{background:#fff;border:1px solid #EDE7DC;border-radius:9px;padding:11px}
-.t u{display:block;width:20px;height:20px;border-radius:6px;background:#E6F1EE;margin-bottom:8px}
-.t i{display:block;height:4.5px;border-radius:3px;background:#E4E9EC;margin-bottom:4px}
-.t i:last-child{width:60%}
-.celular{position:absolute;right:20px;bottom:26px;width:154px;background:#0A1F2C;border-radius:20px;
-  padding:7px;box-shadow:0 26px 50px rgba(10,31,44,.30)}
-.cel-view{background:#fff;border-radius:14px;height:280px;overflow:hidden;position:relative}
-.cel-notch{position:absolute;left:50%;transform:translateX(-50%);top:5px;width:44px;height:5px;
-  background:#0A1F2C;border-radius:4px;z-index:2}
-.cel-top{height:30px;background:#F7F3EC;border-bottom:1px solid #EDE7DC;display:flex;align-items:center;
-  justify-content:center;padding-top:6px}
-.cel-top img{height:11px}
-.cel-hero{padding:12px 11px 0}
-.cel-h1{font-family:F;font-size:13px;font-weight:600;line-height:1.15;color:#0A1F2C;letter-spacing:-.02em}
-.cel-p{margin-top:6px;display:grid;gap:3.5px}
-.cel-p i{display:block;height:4px;border-radius:2px;background:#DFE5E4}
-.cel-p i:nth-child(2){width:76%}
-.cel-btn{margin-top:9px;height:20px;border-radius:11px;background:#FF7A45}
-.cel-img{margin:10px 11px 0;height:62px;border-radius:9px;background:linear-gradient(150deg,#12796B,#0B5347)}
-.cel-lista{margin:9px 11px 0;display:grid;gap:5px}
-.cel-lista i{display:block;height:16px;border-radius:6px;background:#F1EEE7}
-.wa{position:absolute;right:8px;bottom:8px;width:26px;height:26px;border-radius:50%;background:#25D366;
-  display:grid;place-items:center;box-shadow:0 5px 12px rgba(37,211,102,.45)}
-.wa svg{width:15px;height:15px}
+body{width:760px;height:570px;position:relative;overflow:hidden;background:#0D1116}
+.aura{position:absolute;width:640px;height:640px;border-radius:50%;right:-180px;top:-260px;
+  background:radial-gradient(circle,rgba(17,227,154,.20),transparent 62%)}
+.esc{position:absolute;inset:0;display:grid;place-items:center}
+/* pantalla grande */
+.mac{position:relative;width:576px;transform:translate(-28px,-12px)}
+.chasis{background:#05070A;border:1px solid rgba(243,240,233,.18);padding:9px 9px 12px}
+.pantalla{background:#0A0C0F;height:292px;overflow:hidden;position:relative}
+.barra{height:26px;border-bottom:1px solid rgba(243,240,233,.12);display:flex;align-items:center;gap:8px;padding:0 12px}
+.logo{height:9px}
+.mini{margin-left:auto;display:flex;gap:8px}
+.mini i{display:block;width:20px;height:3px;background:rgba(243,240,233,.22)}
+.mini b{display:block;width:44px;height:11px;background:{QUETZAL}}
+.cuerpo{padding:22px 20px 0;display:grid;grid-template-columns:1fr 128px;gap:16px;align-items:center}
+.h{font-family:S;font-size:30px;line-height:.98;letter-spacing:-.032em}
+.h span{display:block;color:{QUETZAL}}
+.p{margin-top:10px;display:grid;gap:5px}
+.p i{display:block;height:4px;background:rgba(243,240,233,.16)}
+.p i:nth-child(2){width:84%}.p i:nth-child(3){width:56%}
+.acc{margin-top:15px;display:flex;gap:7px}
+.acc b{display:block;width:74px;height:20px;background:{QUETZAL}}
+.acc s{display:block;width:56px;height:20px;border:1px solid rgba(243,240,233,.24)}
+.bloque{height:118px;border:1px solid rgba(243,240,233,.18);position:relative}
+.bloque::after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:44px;height:44px;background:{QUETZAL};opacity:.9}
+.fichas{margin-top:20px;border-top:1px solid rgba(243,240,233,.12);display:grid;grid-template-columns:repeat(3,1fr)}
+.fichas div{padding:14px 12px 0;border-right:1px solid rgba(243,240,233,.12)}
+.fichas div:last-child{border-right:0}
+.fichas u{display:block;font-family:M;font-size:7px;letter-spacing:.16em;color:rgba(243,240,233,.36);text-decoration:none;margin-bottom:6px}
+.fichas b{display:block;font-family:S;font-size:19px;line-height:1;letter-spacing:-.03em}
+.pie-mac{height:7px;background:linear-gradient(#20262E,#11151A);width:660px;margin:0 auto;position:relative;left:-50px}
+/* celular */
+.cel{position:absolute;right:4px;bottom:16px;width:162px;background:#05070A;border:1px solid rgba(243,240,233,.2);padding:7px}
+.cel-p{background:#0A0C0F;height:292px;overflow:hidden;position:relative}
+.cel-b{height:22px;border-bottom:1px solid rgba(243,240,233,.12);display:flex;align-items:center;justify-content:center}
+.cel-b img{height:8px}
+.cel-c{padding:14px 12px 0}
+.cel-h{font-family:S;font-size:17px;line-height:1;letter-spacing:-.03em}
+.cel-h span{color:{QUETZAL}}
+.cel-l{margin-top:9px;display:grid;gap:4px}
+.cel-l i{display:block;height:3.5px;background:rgba(243,240,233,.16)}
+.cel-l i:nth-child(2){width:72%}
+.cel-btn{margin-top:12px;height:19px;background:{QUETZAL}}
+.cel-img{margin:12px 12px 0;height:64px;border:1px solid rgba(243,240,233,.18)}
+.cel-fil{margin:10px 12px 0;display:grid;gap:6px}
+.cel-fil i{display:block;height:1px;background:rgba(243,240,233,.14)}
 </style></head><body>
-<div class="escena">
-  <div class="laptop">
-    <div class="pantalla">
-      <div class="viewport">
-        <div class="top">
-          <img class="logo" src="{$LOGO}" alt="">
-          <span class="menu"><i></i><i></i><i></i><b></b></span>
+<span class="aura"></span><span class="grano"></span>
+<div class="esc">
+  <div class="mac">
+    <div class="chasis">
+      <div class="pantalla">
+        <div class="barra">
+          <img class="logo" src="{$MARCA}" alt="">
+          <span class="mini"><i></i><i></i><i></i><b></b></span>
         </div>
-        <div class="contenido">
+        <div class="cuerpo">
           <div>
-            <div class="titulo">Páginas web<em>para tu negocio</em></div>
-            <div class="parrafo"><i></i><i></i><i></i></div>
-            <div class="acciones"><b></b><s></s></div>
+            <div class="h">Páginas web<span>con oficio</span></div>
+            <div class="p"><i></i><i></i><i></i></div>
+            <div class="acc"><b></b><s></s></div>
           </div>
-          <div class="grafico"><span></span></div>
+          <div class="bloque"></div>
         </div>
-        <div class="tarjetas">
-          <div class="t"><u></u><i></i><i></i></div>
-          <div class="t"><u></u><i></i><i></i></div>
-          <div class="t"><u></u><i></i><i></i></div>
+        <div class="fichas">
+          <div><u>AÑOS</u><b>18</b></div>
+          <div><u>SITIOS</u><b>24</b></div>
+          <div><u>DESDE</u><b>Q250</b></div>
         </div>
       </div>
     </div>
-    <div class="base"></div>
+    <div class="pie-mac"></div>
   </div>
-  <div class="celular">
-    <div class="cel-view">
-      <span class="cel-notch"></span>
-      <div class="cel-top"><img src="{$LOGO}" alt=""></div>
-      <div class="cel-hero">
-        <div class="cel-h1">Tu sitio, listo para el celular</div>
-        <div class="cel-p"><i></i><i></i></div>
+  <div class="cel">
+    <div class="cel-p">
+      <div class="cel-b"><img src="{$MARCA}" alt=""></div>
+      <div class="cel-c">
+        <div class="cel-h">Listo para<span>el celular</span></div>
+        <div class="cel-l"><i></i><i></i></div>
         <div class="cel-btn"></div>
       </div>
       <div class="cel-img"></div>
-      <div class="cel-lista"><i></i><i></i><i></i></div>
-      <span class="wa"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8a9.1 9.1 0 0 0-7.8 13.8L2.8 21.2l4.7-1.3A9.1 9.1 0 1 0 12 2.8z"/></svg></span>
+      <div class="cel-fil"><i></i><i></i><i></i><i></i></div>
     </div>
   </div>
 </div>
 </body></html>
 HTML;
+$heroHtml = str_replace('{QUETZAL}', QUETZAL, $heroHtml);
 $png = $tmp . '/hero.png';
-if (capturar($chrome, $heroHtml, $png, 1440, 1080, 1) && a_webp($png, $root . '/public/assets/img/hero-sitio-en-celular-y-laptop.webp', 84)) {
-    echo '  hero-sitio-en-celular-y-laptop.webp  ' . round(filesize($root . '/public/assets/img/hero-sitio-en-celular-y-laptop.webp') / 1024) . " KB\n";
+$destinoHero = $root . '/public/assets/img/hero-estudio.webp';
+if (capturar_exacto($chrome, $heroHtml, $png, 1520, 1140) && a_webp($png, $destinoHero, 84)) {
+    echo '  hero-estudio.webp  ' . round(filesize($destinoHero) / 1024) . " KB\n";
 } else {
     echo "  FALLÓ el hero\n";
 }
 
 // ------------------------------------------------------------------------
-// 3. Imágenes Open Graph (1200x630)
+// 3. Portadas para redes sociales (1200x630)
 // ------------------------------------------------------------------------
-echo "\nImágenes para redes sociales:\n";
+echo "\nPortadas para redes sociales:\n";
 $ogs = [
-    'og-inicio'               => ['Páginas web en Guatemala', 'Diseño a la medida con dominio, hosting y soporte incluidos', 'Desde Q1,250 al año'],
-    'og-diseno-paginas-web'   => ['Diseño de páginas web', 'Estructura, textos y configuración técnica para tu negocio', 'Q1,250 al año'],
-    'og-tiendas-virtuales'    => ['Tiendas virtuales', 'WooCommerce, envíos y cobro con tarjeta para Guatemala', 'Q1,750 al año'],
-    'og-precios'              => ['Precios 2026', 'Lo que cuesta cada servicio, en quetzales y sin letra chiquita', 'Página web · Tienda · Correo'],
-    'og-correo-corporativo'   => ['Correo corporativo', 'Cuentas con tu propio dominio, configuradas y sin spam', 'Consultá el precio'],
-    'og-portafolio'           => ['Portafolio', 'Sitios de clientes guatemaltecos que están en línea hoy', '24 proyectos'],
-    'og-nosotros'             => ['Quiénes somos', 'Una marca de Servicom, diseñando sitios desde 2007', '18+ años'],
-    'og-preguntas-frecuentes' => ['Preguntas frecuentes', 'Dominios, hosting, tiempos, pagos y renovaciones', 'Respuestas claras'],
-    'og-contacto'             => ['Contacto y cotización', 'Contanos qué necesitás y te respondemos con una propuesta', 'WhatsApp y formulario'],
-    'og-blog'                 => ['Guías y artículos', 'Precios, tiendas en línea, pasarelas de pago y dominios .gt', 'Blog'],
+    'og-inicio'               => ['00', 'Estudio web · Guatemala', 'Páginas web con oficio', 'Dominio, alojamiento y soporte incluidos', 'Desde Q1,250 al año'],
+    'og-diseno-paginas-web'   => ['01', 'Servicio', 'Diseño de páginas web', 'Estructura, textos y configuración técnica', 'Q1,250 al año'],
+    'og-tiendas-virtuales'    => ['02', 'Servicio', 'Tiendas virtuales', 'WooCommerce, envíos y cobro con tarjeta', 'Q1,750 al año'],
+    'og-precios'              => ['03', 'Precios 2026', 'En quetzales, sin letra chiquita', 'Página web · Tienda en línea · Correo', 'Ver la tabla completa'],
+    'og-correo-corporativo'   => ['04', 'Servicio', 'Correo con tu dominio', 'Configurado, sin spam y en todos tus equipos', 'Consultar precio'],
+    'og-portafolio'           => ['05', 'Trabajos', 'Portafolio', 'Sitios de clientes guatemaltecos, en línea hoy', '24 proyectos'],
+    'og-nosotros'             => ['06', 'Estudio', 'Quiénes somos', 'Una marca de Servicom, diseñando desde 2007', '18+ años'],
+    'og-preguntas-frecuentes' => ['07', 'Ayuda', 'Preguntas frecuentes', 'Dominios, hosting, tiempos y renovaciones', 'Respuestas claras'],
+    'og-contacto'             => ['08', 'Hablemos', 'Contacto y cotización', 'Contanos qué necesitás y te respondemos', 'WhatsApp y formulario'],
+    'og-blog'                 => ['09', 'Blog', 'Guías para decidir', 'Precios, pasarelas de pago y dominios .gt', 'Seis guías publicadas'],
 ];
 
 foreach ($ogs as $slug => $t) {
-    $titulo = htmlspecialchars($t[0], ENT_QUOTES);
-    $bajada = htmlspecialchars($t[1], ENT_QUOTES);
-    $pastilla = htmlspecialchars($t[2], ENT_QUOTES);
-    $css = base_css($FUENTE_M, $FUENTE_F);
+    list($num, $etiqueta, $titulo, $bajada, $pastilla) = array_map(function ($v) {
+        return htmlspecialchars($v, ENT_QUOTES);
+    }, $t);
+    $css = base_css($SERIF, $SANS, $MONO);
     $html = <<<HTML
 <!doctype html><html><head><meta charset="utf-8"><style>
 {$css}
-body{width:1200px;height:630px;background:#0A1F2C;color:#fff;position:relative;overflow:hidden;
-  padding:76px 84px;display:flex;flex-direction:column;justify-content:space-between}
-body::before{content:'';position:absolute;width:760px;height:760px;border-radius:50%;right:-240px;top:-300px;
-  background:radial-gradient(circle,rgba(18,121,107,.62),transparent 66%)}
-body::after{content:'';position:absolute;width:560px;height:560px;border-radius:50%;left:-200px;bottom:-260px;
-  background:radial-gradient(circle,rgba(255,122,69,.34),transparent 66%)}
+body{width:1200px;height:630px;position:relative;overflow:hidden;padding:70px 80px 0;
+  display:flex;flex-direction:column;justify-content:space-between}
+.aura{position:absolute;width:900px;height:900px;border-radius:50%;right:-280px;top:-380px;
+  background:radial-gradient(circle,rgba(17,227,154,.24),transparent 62%)}
 .c{position:relative;z-index:2}
-.logo{height:44px}
-h1{font-family:F;font-size:70px;font-weight:600;line-height:1.05;letter-spacing:-.03em;max-width:19ch}
-p{font-size:27px;color:#B7CBD3;margin-top:22px;max-width:30ch;line-height:1.4}
-.pill{display:inline-block;margin-top:0;background:#FF7A45;color:#fff;font-size:22px;font-weight:800;
-  padding:13px 26px;border-radius:999px;letter-spacing:-.01em}
-.pie{display:flex;align-items:center;justify-content:space-between;gap:20px}
-.dom{font-size:23px;font-weight:700;color:#8FA9B4;letter-spacing:.02em}
-.linea{position:absolute;left:0;right:0;bottom:0;height:9px;
-  background:linear-gradient(90deg,#12796B 0%,#12796B 46%,#E4B85B 46%,#E4B85B 62%,#FF7A45 62%)}
+.tope{display:flex;justify-content:space-between;align-items:center}
+.tope img{height:30px}
+.et{font-family:M;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:rgba(243,240,233,.5)}
+.et b{color:{QUETZAL};margin-right:14px}
+h1{font-family:S;font-weight:400;font-size:96px;line-height:.94;letter-spacing:-.035em;max-width:15ch;margin-bottom:24px}
+p{font-size:27px;color:rgba(243,240,233,.62);max-width:34ch;letter-spacing:-.012em}
+.pie{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:56px}
+.pill{display:inline-block;background:{QUETZAL};color:#0A0C0F;font-family:M;font-size:17px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;padding:14px 24px}
+.dom{font-family:M;font-size:17px;letter-spacing:.14em;color:rgba(243,240,233,.42)}
+.regla{position:absolute;left:0;right:0;bottom:0;height:8px;background:{QUETZAL}}
+.marcas{position:absolute;inset:34px;border:1px solid rgba(243,240,233,.1)}
 </style></head><body>
-<div class="c"><img class="logo" src="{$LOGO_B}" alt=""></div>
+<span class="aura"></span><span class="grano"></span><span class="marcas"></span>
+<div class="c tope">
+  <img src="{$MARCA}" alt="">
+  <span class="et"><b>{$num}</b>{$etiqueta}</span>
+</div>
 <div class="c">
   <h1>{$titulo}</h1>
   <p>{$bajada}</p>
@@ -354,12 +337,13 @@ p{font-size:27px;color:#B7CBD3;margin-top:22px;max-width:30ch;line-height:1.4}
   <span class="pill">{$pastilla}</span>
   <span class="dom">paginasweb.gt</span>
 </div>
-<span class="linea"></span>
+<span class="regla"></span>
 </body></html>
 HTML;
+    $html = str_replace('{QUETZAL}', QUETZAL, $html);
     $png  = $tmp . '/' . $slug . '.png';
     $webp = $root . '/public/assets/img/og/' . $slug . '.webp';
-    if (capturar($chrome, $html, $png, 1200, 630, 1) && a_webp($png, $webp, 86)) {
+    if (capturar_exacto($chrome, $html, $png, 1200, 630) && a_webp($png, $webp, 86)) {
         echo '  ' . str_pad($slug, 28) . ' ' . round(filesize($webp) / 1024) . " KB\n";
     } else {
         echo "  FALLÓ: {$slug}\n";
@@ -367,14 +351,14 @@ HTML;
 }
 
 // ------------------------------------------------------------------------
-// 4. Iconos PNG para PWA y dispositivos Apple
+// 4. Iconos de aplicación
 // ------------------------------------------------------------------------
 echo "\nIconos de la aplicación:\n";
-$iconoSvg = 'file://' . $root . '/public/assets/img/icons/marca-cuadrada.svg';
+$icono = 'file://' . $root . '/public/assets/img/icons/marca-cuadrada.svg';
 foreach ([180, 192, 512] as $tam) {
-    $html = '<!doctype html><html><head><style>*{margin:0;padding:0}body{width:' . $tam . 'px;height:' . $tam . 'px;overflow:hidden}img{width:' . $tam . 'px;height:' . $tam . 'px;display:block}</style></head><body><img src="' . $iconoSvg . '" alt=""></body></html>';
+    $html = '<!doctype html><html><head><style>*{margin:0;padding:0}body{width:' . $tam . 'px;height:' . $tam . 'px;overflow:hidden}img{width:' . $tam . 'px;height:' . $tam . 'px;display:block}</style></head><body><img src="' . $icono . '" alt=""></body></html>';
     $destino = $root . '/public/assets/img/icons/icono-' . $tam . '.png';
-    if (capturar($chrome, $html, $destino, $tam, $tam, 1)) {
+    if (capturar($chrome, $html, $destino, $tam, $tam)) {
         echo '  icono-' . $tam . ".png\n";
     }
 }

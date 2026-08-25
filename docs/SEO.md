@@ -91,7 +91,7 @@ Para verificar: <https://search.google.com/test/rich-results>
 | Cabeceras de seguridad + CSP | Sí, compatibles con GA4 y Meta Pixel |
 | Compresión y caché del navegador | Sí (gzip/brotli, `immutable` para estáticos) |
 | Imágenes WebP con dimensiones declaradas | Sí, sin desplazamiento de diseño |
-| Fuentes autoalojadas con `font-display: swap` | Sí, 61 KB en total |
+| Fuentes autoalojadas con `font-display: swap` | Sí, 104 KB en total (subconjunto latino) |
 | CSS crítico en línea, resto diferido | Sí |
 | Página 404 propia con código 404 real | Sí |
 

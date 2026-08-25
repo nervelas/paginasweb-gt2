@@ -1,28 +1,41 @@
 /* =========================================================================
    Panel de administración de paginasweb.gt
-   Pensado para usarse igual de cómodo en computadora y en celular.
+   Misma familia visual que el sitio, con densidad de herramienta de trabajo.
    ========================================================================= */
 
+@font-face {
+  font-family: 'Geist';
+  src: url('/assets/fonts/geist-wght.woff2') format('woff2-variations');
+  font-weight: 100 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/assets/fonts/geist-mono-wght.woff2') format('woff2-variations');
+  font-weight: 100 900; font-style: normal; font-display: swap;
+}
+
 :root {
-  --ink: #0A1F2C; --brand: #12796B; --brand-deep: #0B5347; --accent: #FF7A45;
-  --paper: #F4F6F7; --white: #fff; --line: #DDE4E7; --line-soft: #EDF1F2;
-  --texto: #16323F; --suave: #64777F; --error: #C0392B; --error-soft: #FDECEA;
-  --ok-soft: #E6F1EE; --nota-soft: #FFF6E8; --nota-borde: #EFD9AE;
-  --radio: 12px; --sombra: 0 1px 2px rgba(10,31,44,.06), 0 4px 14px rgba(10,31,44,.06);
-  --alto-top: 60px;
+  --ink: #0A0C0F; --brand: #04684E; --brand-deep: #035240; --accent: #11E39A;
+  --paper: #F3F0E9; --white: #fff; --line: #DCD5C6; --line-soft: #EAE5DA;
+  --texto: #0A0C0F; --suave: #5A5F66; --error: #B3341F; --error-soft: #FBEBE7;
+  --ok-soft: #E4F7EF; --nota-soft: #FBF3DF; --nota-borde: #E4D4A8;
+  --radio: 0px; --sombra: none;
+  --alto-top: 62px;
+  --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 * { box-sizing: border-box; }
 body {
   margin: 0; background: var(--paper); color: var(--texto);
-  font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font: 400 15.5px/1.55 'Geist', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -.006em;
   -webkit-font-smoothing: antialiased;
 }
 img { max-width: 100%; height: auto; display: block; }
 a { color: var(--brand-deep); }
-h1 { font-size: 1.5rem; margin: 0; letter-spacing: -.02em; }
-h2 { font-size: 1.05rem; margin: 0 0 14px; letter-spacing: -.01em; }
-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .86em; background: var(--line-soft); padding: 2px 6px; border-radius: 5px; }
+h1 { font-size: 1.45rem; margin: 0; letter-spacing: -.022em; font-weight: 500; }
+h2 { font-size: .78rem; margin: 0 0 16px; letter-spacing: .14em; text-transform: uppercase; font-family: var(--mono); font-weight: 500; color: var(--suave); }
+code { font-family: var(--mono); font-size: .84em; background: var(--line-soft); padding: 2px 6px; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .skip { position: absolute; left: 8px; top: -50px; background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 0 0 8px 8px; z-index: 100; }
@@ -36,7 +49,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
 }
 .ad-marca { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
 .ad-marca img { height: 24px; width: auto; }
-.ad-marca span { font-weight: 700; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--suave); border-left: 1px solid var(--line); padding-left: 10px; }
+.ad-marca span { font-family: var(--mono); font-weight: 500; font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--suave); border-left: 1px solid var(--line); padding-left: 10px; }
 .ad-top__acciones { margin-left: auto; display: flex; gap: 8px; align-items: center; }
 .ad-burger { display: none; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 10px; background: var(--white); cursor: pointer; align-items: center; justify-content: center; padding: 0; }
 .ad-burger span, .ad-burger span::before, .ad-burger span::after { display: block; width: 17px; height: 2px; background: var(--ink); border-radius: 2px; }
@@ -56,12 +69,12 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
   text-decoration: none; color: var(--texto); font-size: .93rem; font-weight: 500;
 }
 .ad-nav a:hover { background: var(--line-soft); }
-.ad-nav a[aria-current="page"] { background: var(--ok-soft); color: var(--brand-deep); font-weight: 700; }
+.ad-nav a[aria-current="page"] { background: var(--ink); color: var(--paper); font-weight: 500; }
 .ad-nav svg { flex: none; opacity: .8; }
 .ad-nav em {
   margin-left: auto; font-style: normal; background: var(--accent); color: var(--ink);
-  font-size: .72rem; font-weight: 700; min-width: 20px; text-align: center;
-  padding: 1px 6px; border-radius: 10px;
+  font-family: var(--mono); font-size: .66rem; font-weight: 600; min-width: 20px; text-align: center;
+  padding: 2px 6px;
 }
 .ad-main { padding: 24px 22px 60px; max-width: 1180px; }
 
@@ -85,17 +98,20 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
 
 /* -------------------------------------------------------------------- Botones */
 .ad-btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: .4em;
-  padding: 10px 17px; border-radius: 9px; border: 1.5px solid transparent;
-  background: var(--brand); color: #fff; font: inherit; font-size: .92rem; font-weight: 600;
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  padding: 11px 18px; border: 1px solid transparent;
+  background: var(--ink); color: var(--paper);
+  font-family: var(--mono); font-size: .72rem; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
   text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: background-color .2s, color .2s, border-color .2s;
 }
-.ad-btn:hover { background: var(--brand-deep); color: #fff; }
+.ad-btn:hover { background: var(--accent); color: var(--ink); border-color: var(--accent); }
 .ad-btn--fantasma { background: var(--white); border-color: var(--line); color: var(--texto); }
 .ad-btn--fantasma:hover { background: var(--line-soft); border-color: var(--suave); color: var(--texto); }
 .ad-btn--peligro { background: var(--white); border-color: #EFCCC6; color: var(--error); }
 .ad-btn--peligro:hover { background: var(--error-soft); color: var(--error); }
-.ad-btn--chico { padding: 6px 11px; font-size: .84rem; }
+.ad-btn--chico { padding: 7px 11px; font-size: .66rem; }
 .ad-btn--bloque { width: 100%; margin-top: 6px; }
 
 /* -------------------------------------------------------------------- Avisos */
@@ -117,18 +133,18 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
 @media (max-width: 760px) { .ad-metricas { grid-template-columns: repeat(2, 1fr); } }
 .ad-metrica { background: var(--white); border: 1px solid var(--line); border-radius: var(--radio); padding: 16px 18px; text-decoration: none; color: inherit; display: block; box-shadow: var(--sombra); }
 .ad-metrica:hover { border-color: var(--brand); }
-.ad-metrica strong { display: block; font-size: 1.9rem; line-height: 1; color: var(--brand-deep); margin-bottom: 6px; }
-.ad-metrica span { font-size: .84rem; color: var(--suave); }
+.ad-metrica strong { display: block; font-size: 2.1rem; line-height: 1; letter-spacing: -.03em; color: var(--ink); margin-bottom: 8px; font-weight: 400; }
+.ad-metrica span { font-family: var(--mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--suave); }
 
 /* ------------------------------------------------------------------- Campos */
 .ad-campo { margin-bottom: 16px; }
-.ad-campo > label { display: block; font-weight: 600; font-size: .88rem; margin-bottom: 6px; }
+.ad-campo > label { display: block; font-family: var(--mono); font-weight: 500; font-size: .66rem; letter-spacing: .13em; text-transform: uppercase; color: var(--suave); margin-bottom: 8px; }
 .ad-campo > label i { font-style: normal; font-weight: 500; font-size: .78rem; color: var(--suave); margin-left: 6px; }
 .ad-campo input[type="text"], .ad-campo input[type="email"], .ad-campo input[type="password"],
 .ad-campo input[type="number"], .ad-campo input[type="datetime-local"], .ad-campo input[type="file"],
 .ad-campo select, .ad-campo textarea {
-  width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 9px;
-  font: inherit; font-size: .95rem; background: var(--white); color: var(--texto);
+  width: 100%; padding: 10px 12px; border: 1px solid var(--line);
+  font: inherit; font-size: .96rem; background: var(--white); color: var(--texto);
 }
 .ad-campo textarea { resize: vertical; min-height: 84px; line-height: 1.55; }
 .ad-campo textarea.ad-html, .ad-campo textarea.ad-mono {
@@ -142,7 +158,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
 .ad-error { margin: 6px 0 0; font-size: .83rem; color: var(--error); font-weight: 600; }
 .ad-casilla { display: flex; align-items: flex-start; gap: 9px; font-weight: 500; font-size: .92rem; cursor: pointer; }
 .ad-casilla input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--brand); flex: none; }
-.ad-contador { float: right; font-size: .78rem; color: var(--suave); font-weight: 600; }
+.ad-contador { float: right; font-family: var(--mono); font-size: .66rem; color: var(--suave); font-weight: 500; letter-spacing: .04em; }
 .ad-contador.pasado { color: var(--error); }
 .ad-rejilla { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; }
 .ad-rejilla .ad-ancho { grid-column: 1 / -1; }
@@ -158,15 +174,15 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
 .ad-tarjeta .ad-tabla-caja { border: 0; border-radius: 0; }
 .ad-tabla { width: 100%; border-collapse: collapse; font-size: .92rem; }
 .ad-tabla th, .ad-tabla td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--line-soft); vertical-align: middle; }
-.ad-tabla thead th { background: #FAFBFB; font-size: .77rem; letter-spacing: .06em; text-transform: uppercase; color: var(--suave); font-weight: 700; }
+.ad-tabla thead th { background: var(--paper); font-family: var(--mono); font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--suave); font-weight: 500; }
 .ad-tabla tr:last-child td { border-bottom: 0; }
 .ad-enlace-fuerte { font-weight: 700; text-decoration: none; }
 .ad-enlace-fuerte:hover { text-decoration: underline; }
 .ad-acciones { white-space: nowrap; display: flex; gap: 6px; align-items: center; }
 .ad-acciones form { margin: 0; display: inline; }
-.ad-pastilla { display: inline-block; font-size: .76rem; font-weight: 700; padding: 3px 9px; border-radius: 20px; }
-.ad-pastilla.si { background: var(--ok-soft); color: var(--brand-deep); }
-.ad-pastilla.no { background: #F3E7E2; color: #A44A2E; }
+.ad-pastilla { display: inline-block; font-family: var(--mono); font-size: .64rem; letter-spacing: .09em; text-transform: uppercase; font-weight: 500; padding: 3px 8px; }
+.ad-pastilla.si { background: var(--ok-soft); color: var(--brand); }
+.ad-pastilla.no { background: var(--error-soft); color: var(--error); }
 
 @media (max-width: 760px) {
   .ad-tabla thead { display: none; }
@@ -202,7 +218,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
 
 /* ----------------------------------------------------------------- Ingreso */
 .ad-login { display: grid; place-items: center; min-height: 100vh; padding: 20px; background: var(--ink); }
-.ad-login__caja { background: var(--white); border-radius: 18px; padding: 34px 30px; width: 100%; max-width: 400px; box-shadow: 0 24px 60px rgba(0,0,0,.3); }
+.ad-login__caja { background: var(--white); padding: 38px 34px; width: 100%; max-width: 400px; }
 .ad-login__caja img { height: 32px; width: auto; margin-bottom: 22px; }
-.ad-login__caja h1 { font-size: 1.3rem; margin-bottom: 20px; }
+.ad-login__caja h1 { font-size: 1.25rem; margin-bottom: 22px; letter-spacing: -.02em; }
 .ad-login__pie { margin: 18px 0 0; font-size: .8rem; color: var(--suave); }

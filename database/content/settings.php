@@ -35,13 +35,12 @@ return [
     'social_youtube'   => '',
 
     // Marca visual
-    'color_ink'    => '#0A1F2C',
-    'color_brand'  => '#12796B',
-    'color_accent' => '#FF7A45',
-    'color_paper'  => '#F7F3EC',
-    'color_gold'   => '#E4B85B',
-    'logo'         => '/assets/img/logo-paginasweb-gt.svg',
-    'logo_white'   => '/assets/img/logo-paginasweb-gt-blanco.svg',
+    'color_ink'       => '#0A0C0F',
+    'color_paper'     => '#F3F0E9',
+    'color_brand'     => '#11E39A',
+    'color_brand_ink' => '#04684E',
+    'logo'            => '/assets/img/marca.svg',
+    'logo_white'      => '/assets/img/marca-blanca.svg',
 
     // Analítica (se pegan los códigos desde el panel; vacío = no se imprime nada)
     'ga4_id'                => '',

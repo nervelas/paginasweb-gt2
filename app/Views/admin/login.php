@@ -10,7 +10,7 @@
 </head>
 <body class="ad-login">
 <main class="ad-login__caja">
-  <img src="/assets/img/logo-paginasweb-gt.svg" alt="<?php echo e(Settings::get('site_name')); ?>" width="200" height="35">
+  <img src="/assets/img/marca.svg" alt="<?php echo e(Settings::get('site_name')); ?>" width="200" height="28">
   <h1>Entrar al panel</h1>
   <?php if ($error): ?><div class="ad-aviso ad-aviso--error" role="alert"><?php echo e($error); ?></div><?php endif; ?>
   <form method="post" autocomplete="off">

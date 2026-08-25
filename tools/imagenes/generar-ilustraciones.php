@@ -1,229 +1,209 @@
 <?php
 /**
- * Ilustraciones SVG originales para las páginas de servicio y el blog.
- * Formas planas con la paleta de la marca. Sin texto, para que se vean
- * igual en cualquier navegador sin depender de tipografías externas.
+ * Láminas técnicas en SVG para las páginas de servicio y el blog.
+ * Geometría de trazo fino sobre lienzo oscuro, con un solo elemento en el
+ * color de señal. Escalan a cualquier tamaño y pesan menos de 3 KB.
  */
 
 $root = dirname(dirname(__DIR__));
 $img  = $root . '/public/assets/img';
 @mkdir($img . '/blog', 0755, true);
 
-$JADE = '#12796B'; $DEEP = '#0B5347'; $CORAL = '#FF7A45'; $INK = '#0A1F2C';
-$PAPER = '#F7F3EC'; $GOLD = '#E4B85B'; $SOFT = '#E6F1EE'; $LINE = '#DFD8CC';
+$OBS = '#0A0C0F';
+$Q   = '#11E39A';
+$R   = 'rgba(243,240,233,.20)';   // regla capilar
+$R2  = 'rgba(243,240,233,.10)';   // regla secundaria
+$T   = 'rgba(243,240,233,.55)';   // relleno tenue
 
-function svg($w, $h, $cuerpo, $titulo)
+function lamina($w, $h, $cuerpo, $titulo, $obs, $r, $q)
 {
+    // Marco, marcas de esquina y retícula base compartidos por todas las láminas
+    $m = 22;
+    $marco = '<rect x="' . $m . '" y="' . $m . '" width="' . ($w - 2 * $m) . '" height="' . ($h - 2 * $m) . '" fill="none" stroke="' . $r . '"/>'
+        . '<path d="M' . $m . ' ' . ($m + 12) . 'V' . $m . 'h12" stroke="' . $q . '" fill="none"/>'
+        . '<path d="M' . ($w - $m) . ' ' . ($h - $m - 12) . 'V' . ($h - $m) . 'h-12" stroke="' . $q . '" fill="none"/>';
+
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' . $w . ' ' . $h . '" width="' . $w . '" height="' . $h . '" role="img" aria-label="' . htmlspecialchars($titulo, ENT_QUOTES) . '">'
         . '<title>' . htmlspecialchars($titulo, ENT_QUOTES) . '</title>'
-        . $cuerpo . '</svg>' . "\n";
+        . '<rect width="' . $w . '" height="' . $h . '" fill="' . $obs . '"/>'
+        . '<g stroke-width="1" shape-rendering="geometricPrecision">' . $marco . '</g>'
+        . '<g stroke-width="1.2" fill="none" stroke-linecap="square">' . $cuerpo . '</g>'
+        . '</svg>' . "\n";
 }
 
-function lineas($x, $y, $anchos, $color, $alto = 7, $sep = 12)
+/** Renglones de texto simulados. */
+function reng($x, $y, $anchos, $color, $sep = 11, $alto = 3)
 {
-    $out = '';
+    $o = '';
     foreach ($anchos as $i => $w) {
-        $out .= '<rect x="' . $x . '" y="' . ($y + $i * ($alto + $sep)) . '" width="' . $w . '" height="' . $alto . '" rx="' . ($alto / 2) . '" fill="' . $color . '"/>';
+        $o .= '<rect x="' . $x . '" y="' . ($y + $i * $sep) . '" width="' . $w . '" height="' . $alto . '" fill="' . $color . '" stroke="none"/>';
     }
-    return $out;
+    return $o;
 }
 
 $archivos = [];
 
-// ------------------------------------------------- Servicio: páginas web
-$archivos['servicio-paginas-web.svg'] = svg(440, 360, '
-<rect x="30" y="34" width="330" height="248" rx="18" fill="' . $SOFT . '"/>
-<rect x="58" y="60" width="330" height="248" rx="18" fill="#FFFFFF" stroke="' . $LINE . '" stroke-width="2"/>
-<path d="M58 78a18 18 0 0 1 18-18h294a18 18 0 0 1 18 18v20H58z" fill="' . $INK . '"/>
-<circle cx="80" cy="79" r="5" fill="' . $CORAL . '"/><circle cx="98" cy="79" r="5" fill="' . $GOLD . '"/><circle cx="116" cy="79" r="5" fill="' . $JADE . '"/>
-<rect x="140" y="72" width="230" height="14" rx="7" fill="#FFFFFF" opacity=".16"/>
-<rect x="82" y="120" width="150" height="16" rx="8" fill="' . $INK . '"/>
-' . lineas(82, 152, [190, 160, 110], '#E4E9EC', 8, 11) . '
-<rect x="82" y="212" width="96" height="30" rx="15" fill="' . $CORAL . '"/>
-<rect x="190" y="212" width="72" height="30" rx="15" fill="none" stroke="' . $LINE . '" stroke-width="2"/>
-<rect x="256" y="118" width="108" height="96" rx="14" fill="' . $JADE . '"/>
-<rect x="286" y="146" width="48" height="40" rx="10" fill="#FFFFFF" opacity=".92"/>
-<rect x="82" y="262" width="80" height="30" rx="10" fill="' . $SOFT . '"/>
-<rect x="172" y="262" width="80" height="30" rx="10" fill="' . $SOFT . '"/>
-<rect x="262" y="262" width="80" height="30" rx="10" fill="' . $SOFT . '"/>
-<circle cx="374" cy="296" r="30" fill="' . $DEEP . '"/>
-<path d="M362 296l8 8 16-17" stroke="#FFFFFF" stroke-width="4.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-', 'Ilustración de una página web con secciones ordenadas');
+// ---------------------------------------------------- Servicio: páginas web
+$archivos['servicio-paginas-web.svg'] = lamina(520, 420, '
+<rect x="62" y="76" width="396" height="268" stroke="' . $R . '"/>
+<path d="M62 112h396" stroke="' . $R . '"/>
+<circle cx="82" cy="94" r="3.2" fill="' . $Q . '" stroke="none"/>
+<circle cx="96" cy="94" r="3.2" fill="' . $R . '" stroke="none"/>
+<circle cx="110" cy="94" r="3.2" fill="' . $R . '" stroke="none"/>
+<rect x="132" y="88" width="180" height="12" stroke="' . $R2 . '"/>
+' . reng(90, 148, [150, 118], 'rgba(243,240,233,.55)', 16, 5) . '
+' . reng(90, 196, [230, 198, 152], 'rgba(243,240,233,.16)', 12, 3) . '
+<rect x="90" y="248" width="86" height="26" fill="' . $Q . '" stroke="none"/>
+<rect x="186" y="248" width="66" height="26" stroke="' . $R . '"/>
+<rect x="330" y="146" width="108" height="106" stroke="' . $R . '"/>
+<path d="M330 252l108-106M330 146l108 106" stroke="' . $R2 . '"/>
+<rect x="90" y="300" width="104" height="24" stroke="' . $R2 . '"/>
+<rect x="206" y="300" width="104" height="24" stroke="' . $R2 . '"/>
+<rect x="322" y="300" width="104" height="24" stroke="' . $R2 . '"/>
+', 'Lámina técnica de una página web con sus secciones', $OBS, $R, $Q);
 
-// -------------------------------------------- Servicio: tiendas virtuales
-$archivos['servicio-tiendas-virtuales.svg'] = svg(440, 360, '
-<rect x="34" y="60" width="300" height="230" rx="18" fill="#FFFFFF" stroke="' . $LINE . '" stroke-width="2"/>
-<path d="M34 78a18 18 0 0 1 18-18h264a18 18 0 0 1 18 18v16H34z" fill="' . $SOFT . '"/>
-<rect x="58" y="112" width="120" height="88" rx="12" fill="' . $SOFT . '"/>
-<circle cx="118" cy="150" r="24" fill="' . $JADE . '"/>
-<rect x="58" y="212" width="80" height="9" rx="4.5" fill="#DDE3E6"/>
-<rect x="58" y="230" width="52" height="12" rx="6" fill="' . $INK . '"/>
-<rect x="194" y="112" width="120" height="88" rx="12" fill="' . $SOFT . '"/>
-<rect x="228" y="134" width="52" height="44" rx="10" fill="' . $GOLD . '"/>
-<rect x="194" y="212" width="80" height="9" rx="4.5" fill="#DDE3E6"/>
-<rect x="194" y="230" width="52" height="12" rx="6" fill="' . $INK . '"/>
-<rect x="58" y="258" width="256" height="14" rx="7" fill="#EDF1F0"/>
-<path d="M296 176h84a22 22 0 0 1 22 22v92a22 22 0 0 1-22 22h-84a22 22 0 0 1-22-22v-92a22 22 0 0 1 22-22z" fill="' . $INK . '"/>
-<path d="M296 210h58" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity=".35"/>
-<path d="M300 250h76" stroke="' . $CORAL . '" stroke-width="9" stroke-linecap="round"/>
-<path d="M300 274h50" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" opacity=".3"/>
-<circle cx="146" cy="304" r="34" fill="' . $CORAL . '"/>
-<path d="M132 292h5l4 20h18l4-14h-24" stroke="#FFFFFF" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="144" cy="318" r="2.6" fill="#FFFFFF"/><circle cx="155" cy="318" r="2.6" fill="#FFFFFF"/>
-', 'Ilustración de una tienda en línea con carrito de compras');
+// ------------------------------------------------ Servicio: tiendas virtuales
+$archivos['servicio-tiendas-virtuales.svg'] = lamina(520, 420, '
+<rect x="62" y="76" width="240" height="150" stroke="' . $R . '"/>
+<path d="M62 76l240 150M302 76L62 226" stroke="' . $R2 . '"/>
+<rect x="62" y="244" width="240" height="100" stroke="' . $R . '"/>
+' . reng(84, 268, [130, 96], 'rgba(243,240,233,.4)', 14, 4) . '
+<rect x="84" y="308" width="72" height="20" fill="' . $Q . '" stroke="none"/>
+<rect x="330" y="76" width="128" height="180" stroke="' . $R . '"/>
+<path d="M330 112h128" stroke="' . $R . '"/>
+' . reng(348, 132, [92, 74, 58], 'rgba(243,240,233,.18)', 12, 3) . '
+<rect x="348" y="188" width="92" height="22" fill="' . $Q . '" stroke="none"/>
+<path d="M344 300h14l8 34h68l7-24h-72" stroke="' . $Q . '" stroke-width="1.6"/>
+<circle cx="368" cy="346" r="4" stroke="' . $Q . '"/>
+<circle cx="410" cy="346" r="4" stroke="' . $Q . '"/>
+', 'Lámina técnica de una tienda en línea', $OBS, $R, $Q);
 
-// -------------------------------------------- Servicio: correo corporativo
-$archivos['servicio-correo-corporativo.svg'] = svg(440, 360, '
-<rect x="42" y="76" width="290" height="196" rx="18" fill="' . $SOFT . '"/>
-<rect x="72" y="104" width="290" height="196" rx="18" fill="#FFFFFF" stroke="' . $LINE . '" stroke-width="2"/>
-<path d="M74 122l143 100 143-100" stroke="' . $JADE . '" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M72 122a18 18 0 0 1 18-18h254a18 18 0 0 1 18 18" stroke="' . $LINE . '" stroke-width="2" fill="none"/>
-<circle cx="356" cy="106" r="34" fill="' . $CORAL . '"/>
-<path d="M366 100a13 13 0 1 0-4 20c4 2 9 1 12-1" stroke="#FFFFFF" stroke-width="3.4" fill="none" stroke-linecap="round"/>
-<circle cx="356" cy="108" r="6.5" fill="none" stroke="#FFFFFF" stroke-width="3.2"/>
-<rect x="110" y="246" width="150" height="9" rx="4.5" fill="#E4E9EC"/>
-<rect x="110" y="266" width="96" height="9" rx="4.5" fill="#E4E9EC"/>
-<rect x="86" y="308" width="180" height="34" rx="12" fill="' . $DEEP . '"/>
-<path d="M104 325h8l4 6 6-14 5 8h10" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="150" y="320" width="94" height="8" rx="4" fill="#FFFFFF" opacity=".3"/>
-<rect x="292" y="286" width="86" height="60" rx="12" fill="' . $JADE . '"/>
-<path d="M308 306h54M308 322h34" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity=".82"/>
-', 'Ilustración de bandeja de correo con dominio propio');
+// ------------------------------------------- Servicio: correo corporativo
+$archivos['servicio-correo-corporativo.svg'] = lamina(520, 420, '
+<rect x="72" y="112" width="376" height="212" stroke="' . $R . '"/>
+<path d="M72 112l188 132 188-132" stroke="' . $R . '"/>
+<path d="M72 324l142-100M448 324L306 224" stroke="' . $R2 . '"/>
+<circle cx="404" cy="128" r="34" stroke="' . $Q . '" stroke-width="1.6"/>
+<circle cx="404" cy="128" r="11" stroke="' . $Q . '" stroke-width="1.6"/>
+<path d="M415 128v9c0 6 10 6 10-4a21 21 0 1 0-8 17" stroke="' . $Q . '" stroke-width="1.6"/>
+' . reng(102, 282, [120, 88], 'rgba(243,240,233,.22)', 13, 3) . '
+<rect x="330" y="276" width="96" height="30" stroke="' . $R . '"/>
+<path d="M346 292h10l5 8 6-16 5 8h12" stroke="' . $Q . '" stroke-width="1.4"/>
+', 'Lámina técnica de correo con dominio propio', $OBS, $R, $Q);
 
-// --------------------------------------------------------- Blog: precios
-$archivos['blog/precios-pagina-web-guatemala.svg'] = svg(800, 450, '
-<rect width="800" height="450" fill="' . $PAPER . '"/>
-<circle cx="672" cy="72" r="180" fill="' . $SOFT . '"/>
-<rect x="80" y="112" width="300" height="230" rx="20" fill="#FFFFFF" stroke="' . $LINE . '" stroke-width="2"/>
-<rect x="80" y="112" width="300" height="56" rx="20" fill="' . $INK . '"/>
-<rect x="80" y="148" width="300" height="20" fill="' . $INK . '"/>
-<rect x="112" y="132" width="120" height="16" rx="8" fill="#FFFFFF" opacity=".55"/>
-<rect x="112" y="200" width="160" height="26" rx="13" fill="' . $JADE . '"/>
-' . lineas(112, 248, [200, 170, 130], '#E4E9EC', 8, 12) . '
-<rect x="112" y="304" width="120" height="18" rx="9" fill="' . $CORAL . '"/>
-<g transform="translate(430 130)">
-  <rect x="0" y="150" width="52" height="70" rx="10" fill="' . $SOFT . '"/>
-  <rect x="70" y="104" width="52" height="116" rx="10" fill="' . $JADE . '"/>
-  <rect x="140" y="56" width="52" height="164" rx="10" fill="' . $DEEP . '"/>
-  <rect x="210" y="16" width="52" height="204" rx="10" fill="' . $CORAL . '"/>
+// ---------------------------------------------------------- Blog: precios
+$archivos['blog/precios-pagina-web-guatemala.svg'] = lamina(1200, 675, '
+<rect x="120" y="140" width="420" height="380" stroke="' . $R . '"/>
+<path d="M120 200h420" stroke="' . $R . '"/>
+' . reng(156, 168, [160], 'rgba(243,240,233,.35)', 12, 5) . '
+' . reng(156, 240, [300, 250, 190], 'rgba(243,240,233,.16)', 20, 4) . '
+<rect x="156" y="356" width="180" height="40" fill="' . $Q . '" stroke="none"/>
+' . reng(156, 430, [340, 280], 'rgba(243,240,233,.1)', 20, 4) . '
+<g>
+  <path d="M660 520h420" stroke="' . $R . '"/>
+  <rect x="676" y="410" width="62" height="110" stroke="' . $R . '"/>
+  <rect x="768" y="330" width="62" height="190" stroke="' . $R . '"/>
+  <rect x="860" y="250" width="62" height="270" stroke="' . $R . '"/>
+  <rect x="952" y="160" width="62" height="360" fill="' . $Q . '" stroke="none"/>
 </g>
-<path d="M430 372h262" stroke="' . $LINE . '" stroke-width="3" stroke-linecap="round"/>
-<circle cx="642" cy="112" r="42" fill="' . $GOLD . '"/>
-<path d="M642 90v44M632 100h16a8 8 0 0 1 0 16h-14a8 8 0 0 0 0 16h18" stroke="#FFFFFF" stroke-width="4.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-', 'Ilustración sobre precios de páginas web en Guatemala');
+<path d="M660 160h40M680 140v40" stroke="' . $R2 . '"/>
+', 'Lámina sobre precios de páginas web en Guatemala', $OBS, $R, $Q);
 
 // ----------------------------------------------------- Blog: crear tienda
-$archivos['blog/crear-tienda-en-linea-guatemala.svg'] = svg(800, 450, '
-<rect width="800" height="450" fill="' . $PAPER . '"/>
-<circle cx="124" cy="392" r="170" fill="' . $SOFT . '"/>
-<path d="M232 128h336l26 62H206z" fill="' . $CORAL . '"/>
-<rect x="232" y="190" width="336" height="184" rx="14" fill="#FFFFFF" stroke="' . $LINE . '" stroke-width="2"/>
-<rect x="262" y="222" width="126" height="90" rx="12" fill="' . $SOFT . '"/>
-<circle cx="325" cy="262" r="26" fill="' . $JADE . '"/>
-<rect x="412" y="222" width="126" height="90" rx="12" fill="' . $SOFT . '"/>
-<rect x="446" y="246" width="58" height="46" rx="10" fill="' . $GOLD . '"/>
-<rect x="262" y="330" width="126" height="14" rx="7" fill="#E4E9EC"/>
-<rect x="412" y="330" width="86" height="14" rx="7" fill="#E4E9EC"/>
+$archivos['blog/crear-tienda-en-linea-guatemala.svg'] = lamina(1200, 675, '
 <g>
-  <circle cx="140" cy="150" r="30" fill="' . $DEEP . '"/><path d="M128 150l8 9 16-18" stroke="#FFFFFF" stroke-width="4.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="140" cy="228" r="30" fill="' . $JADE . '"/><path d="M128 228l8 9 16-18" stroke="#FFFFFF" stroke-width="4.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="140" cy="306" r="30" fill="#FFFFFF" stroke="' . $LINE . '" stroke-width="2.6"/><circle cx="140" cy="306" r="8" fill="' . $CORAL . '"/>
-  <path d="M140 180v18M140 258v18" stroke="' . $JADE . '" stroke-width="3.4" stroke-linecap="round" opacity=".5"/>
+  <circle cx="180" cy="200" r="22" stroke="' . $Q . '"/><path d="M170 200l7 8 14-16" stroke="' . $Q . '"/>
+  <circle cx="180" cy="338" r="22" stroke="' . $Q . '"/><path d="M170 338l7 8 14-16" stroke="' . $Q . '"/>
+  <circle cx="180" cy="476" r="22" stroke="' . $R . '"/>
+  <path d="M180 222v94M180 360v94" stroke="' . $R2 . '"/>
+  ' . reng(232, 192, [260, 190], 'rgba(243,240,233,.22)', 15, 4) . '
+  ' . reng(232, 330, [230, 170], 'rgba(243,240,233,.22)', 15, 4) . '
+  ' . reng(232, 468, [200, 150], 'rgba(243,240,233,.1)', 15, 4) . '
 </g>
-<rect x="612" y="240" width="112" height="150" rx="18" fill="' . $INK . '"/>
-<rect x="626" y="262" width="84" height="106" rx="8" fill="#FFFFFF"/>
-<rect x="638" y="276" width="60" height="34" rx="7" fill="' . $SOFT . '"/>
-<rect x="638" y="320" width="60" height="9" rx="4.5" fill="#E4E9EC"/>
-<rect x="638" y="338" width="40" height="14" rx="7" fill="' . $CORAL . '"/>
-', 'Ilustración de los pasos para montar una tienda en línea');
+<rect x="600" y="140" width="440" height="380" stroke="' . $R . '"/>
+<path d="M600 210h440M820 210v310" stroke="' . $R . '"/>
+<path d="M600 140l90-56h260l90 56" stroke="' . $Q . '" stroke-width="1.6"/>
+<rect x="640" y="250" width="140" height="100" stroke="' . $R2 . '"/>
+<rect x="860" y="250" width="140" height="100" stroke="' . $R2 . '"/>
+' . reng(640, 386, [140, 96], 'rgba(243,240,233,.16)', 14, 4) . '
+' . reng(860, 386, [140, 96], 'rgba(243,240,233,.16)', 14, 4) . '
+<rect x="640" y="452" width="110" height="30" fill="' . $Q . '" stroke="none"/>
+', 'Lámina sobre los pasos para montar una tienda en línea', $OBS, $R, $Q);
 
-// ---------------------------------------------- Blog: WooCommerce o Shopify
-$archivos['blog/woocommerce-vs-shopify-guatemala.svg'] = svg(800, 450, '
-<rect width="800" height="450" fill="' . $PAPER . '"/>
-<rect x="70" y="88" width="290" height="274" rx="20" fill="#FFFFFF" stroke="' . $JADE . '" stroke-width="2.6"/>
-<rect x="102" y="122" width="72" height="72" rx="18" fill="' . $JADE . '"/>
-<path d="M120 158l10 11 20-22" stroke="#FFFFFF" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-' . lineas(102, 222, [226, 190, 150, 200], '#E4E9EC', 9, 14) . '
-<rect x="102" y="316" width="120" height="20" rx="10" fill="' . $DEEP . '"/>
-<rect x="440" y="88" width="290" height="274" rx="20" fill="#FFFFFF" stroke="' . $LINE . '" stroke-width="2.6"/>
-<rect x="472" y="122" width="72" height="72" rx="18" fill="' . $SOFT . '"/>
-<circle cx="508" cy="158" r="17" fill="' . $GOLD . '"/>
-' . lineas(472, 222, [226, 150, 190, 130], '#EAEEF0', 9, 14) . '
-<rect x="472" y="316" width="120" height="20" rx="10" fill="' . $LINE . '"/>
-<circle cx="400" cy="225" r="46" fill="' . $CORAL . '"/>
-<path d="M384 208l32 34M416 208l-32 34" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
-', 'Comparación entre dos plataformas de comercio electrónico');
+// -------------------------------------------- Blog: WooCommerce o Shopify
+$archivos['blog/woocommerce-vs-shopify-guatemala.svg'] = lamina(1200, 675, '
+<rect x="110" y="130" width="420" height="400" stroke="' . $Q . '"/>
+<rect x="154" y="176" width="86" height="86" stroke="' . $Q . '"/>
+<path d="M170 219l14 16 26-32" stroke="' . $Q . '" stroke-width="1.6"/>
+' . reng(154, 306, [330, 270, 210, 290], 'rgba(243,240,233,.26)', 24, 4) . '
+<rect x="154" y="452" width="170" height="34" fill="' . $Q . '" stroke="none"/>
+<rect x="670" y="130" width="420" height="400" stroke="' . $R . '"/>
+<rect x="714" y="176" width="86" height="86" stroke="' . $R . '"/>
+<circle cx="757" cy="219" r="20" stroke="' . $R . '"/>
+' . reng(714, 306, [330, 210, 270, 180], 'rgba(243,240,233,.12)', 24, 4) . '
+<rect x="714" y="452" width="170" height="34" stroke="' . $R . '"/>
+<path d="M578 310l44 44M622 310l-44 44" stroke="' . $Q . '" stroke-width="1.6"/>
+', 'Lámina comparativa entre dos plataformas de comercio', $OBS, $R, $Q);
 
-// --------------------------------------------------- Blog: cobro con tarjeta
-$archivos['blog/cobrar-con-tarjeta-guatemala.svg'] = svg(800, 450, '
-<rect width="800" height="450" fill="' . $PAPER . '"/>
-<circle cx="668" cy="360" r="176" fill="' . $SOFT . '"/>
-<rect x="96" y="128" width="330" height="204" rx="22" fill="' . $INK . '"/>
-<rect x="96" y="180" width="330" height="36" fill="' . $DEEP . '"/>
-<rect x="128" y="248" width="80" height="14" rx="7" fill="#FFFFFF" opacity=".5"/>
-<rect x="224" y="248" width="80" height="14" rx="7" fill="#FFFFFF" opacity=".5"/>
-<rect x="128" y="286" width="120" height="12" rx="6" fill="#FFFFFF" opacity=".3"/>
-<circle cx="360" cy="292" r="24" fill="' . $CORAL . '"/><circle cx="392" cy="292" r="24" fill="' . $GOLD . '" opacity=".92"/>
-<rect x="330" y="90" width="330" height="204" rx="22" fill="#FFFFFF" stroke="' . $LINE . '" stroke-width="2.6"/>
-<rect x="330" y="142" width="330" height="36" fill="' . $JADE . '"/>
-<rect x="362" y="210" width="80" height="14" rx="7" fill="#E4E9EC"/>
-<rect x="458" y="210" width="80" height="14" rx="7" fill="#E4E9EC"/>
-<rect x="362" y="248" width="130" height="12" rx="6" fill="#EDF1F2"/>
-<rect x="576" y="228" width="56" height="40" rx="8" fill="' . $GOLD . '"/>
-<path d="M576 242h56M594 228v40" stroke="#FFFFFF" stroke-width="2.6" opacity=".6"/>
-<g transform="translate(556 300)">
-  <rect width="176" height="118" rx="18" fill="' . $DEEP . '"/>
-  <rect x="24" y="20" width="128" height="34" rx="8" fill="#FFFFFF" opacity=".9"/>
-  <rect x="24" y="68" width="34" height="26" rx="6" fill="#FFFFFF" opacity=".28"/>
-  <rect x="70" y="68" width="34" height="26" rx="6" fill="#FFFFFF" opacity=".28"/>
-  <rect x="116" y="68" width="36" height="26" rx="6" fill="' . $CORAL . '"/>
-</g>
-', 'Ilustración de un pago con tarjeta en una tienda en línea');
-
-// ------------------------------------------------------- Blog: dominio .gt
-$archivos['blog/dominio-gt-guatemala.svg'] = svg(800, 450, '
-<rect width="800" height="450" fill="' . $PAPER . '"/>
-<circle cx="400" cy="228" r="146" fill="' . $SOFT . '"/>
-<circle cx="400" cy="228" r="146" fill="none" stroke="' . $JADE . '" stroke-width="2.6" opacity=".5"/>
-<path d="M254 228h292M400 82c46 46 46 246 0 292M400 82c-46 46-46 246 0 292" stroke="' . $JADE . '" stroke-width="2.6" fill="none" opacity=".45"/>
-<path d="M286 148c68 30 160 30 228 0M286 308c68-30 160-30 228 0" stroke="' . $JADE . '" stroke-width="2.6" fill="none" opacity=".45"/>
-<rect x="176" y="188" width="448" height="82" rx="41" fill="#FFFFFF" stroke="' . $LINE . '" stroke-width="2.6"/>
-<path d="M222 224v-10a14 14 0 0 1 28 0v10" stroke="' . $JADE . '" stroke-width="4.4" fill="none" stroke-linecap="round"/>
-<rect x="216" y="224" width="40" height="28" rx="7" fill="' . $JADE . '"/>
-<rect x="282" y="216" width="164" height="18" rx="9" fill="' . $INK . '"/>
-<rect x="282" y="242" width="98" height="10" rx="5" fill="#E4E9EC"/>
-<rect x="464" y="210" width="120" height="40" rx="20" fill="' . $CORAL . '"/>
-<path d="M496 230h56M534 216l18 14-18 14" stroke="#FFFFFF" stroke-width="4.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="180" cy="106" r="34" fill="' . $DEEP . '"/><path d="M168 106l8 9 16-18" stroke="#FFFFFF" stroke-width="4.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="626" cy="352" r="34" fill="' . $GOLD . '"/><path d="M626 336v22M626 368v.01" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
-', 'Ilustración de un dominio con extensión punto gt');
-
-// ------------------------------------------------------- Blog: 7 errores
-$archivos['blog/errores-contratar-diseno-web.svg'] = svg(800, 450, '
-<rect width="800" height="450" fill="' . $PAPER . '"/>
-<circle cx="700" cy="96" r="150" fill="' . $SOFT . '"/>
-<rect x="140" y="76" width="380" height="308" rx="22" fill="#FFFFFF" stroke="' . $LINE . '" stroke-width="2.6"/>
-<rect x="176" y="112" width="180" height="18" rx="9" fill="' . $INK . '"/>
+// ------------------------------------------------ Blog: cobro con tarjeta
+$archivos['blog/cobrar-con-tarjeta-guatemala.svg'] = lamina(1200, 675, '
+<rect x="130" y="180" width="380" height="238" stroke="' . $R . '"/>
+<path d="M130 246h380" stroke="' . $R . '"/>
+<rect x="164" y="300" width="96" height="16" fill="' . $T . '" stroke="none"/>
+<rect x="280" y="300" width="96" height="16" fill="' . $T . '" stroke="none"/>
+<rect x="164" y="348" width="150" height="12" fill="rgba(243,240,233,.18)" stroke="none"/>
+<rect x="404" y="336" width="72" height="50" stroke="' . $Q . '"/>
+<path d="M404 358h72M440 336v50" stroke="' . $Q . '"/>
+<rect x="330" y="256" width="380" height="238" fill="' . $OBS . '" stroke="' . $Q . '"/>
+<path d="M330 322h380" stroke="' . $Q . '"/>
+<rect x="364" y="376" width="96" height="16" fill="rgba(243,240,233,.4)" stroke="none"/>
+<rect x="480" y="376" width="96" height="16" fill="rgba(243,240,233,.4)" stroke="none"/>
+<rect x="604" y="412" width="72" height="50" fill="' . $Q . '" stroke="none"/>
 <g>
-  <circle cx="192" cy="176" r="17" fill="' . $DEEP . '"/><path d="M184 176l6 7 12-14" stroke="#FFFFFF" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="224" y="168" width="220" height="14" rx="7" fill="#E4E9EC"/>
-  <circle cx="192" cy="228" r="17" fill="' . $DEEP . '"/><path d="M184 228l6 7 12-14" stroke="#FFFFFF" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="224" y="220" width="180" height="14" rx="7" fill="#E4E9EC"/>
-  <circle cx="192" cy="280" r="17" fill="#F3E7E2"/><path d="M186 274l12 12M198 274l-12 12" stroke="#B4543A" stroke-width="3.6" stroke-linecap="round"/>
-  <rect x="224" y="272" width="200" height="14" rx="7" fill="#F2DED8"/>
-  <circle cx="192" cy="332" r="17" fill="' . $DEEP . '"/><path d="M184 332l6 7 12-14" stroke="#FFFFFF" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="224" y="324" width="150" height="14" rx="7" fill="#E4E9EC"/>
+  <rect x="810" y="230" width="270" height="200" stroke="' . $R . '"/>
+  <rect x="850" y="266" width="190" height="52" stroke="' . $R2 . '"/>
+  <rect x="850" y="342" width="54" height="42" stroke="' . $R2 . '"/>
+  <rect x="918" y="342" width="54" height="42" stroke="' . $R2 . '"/>
+  <rect x="986" y="342" width="54" height="42" fill="' . $Q . '" stroke="none"/>
 </g>
-<g transform="translate(560 150)">
-  <path d="M84 0l84 150H0z" fill="' . $CORAL . '"/>
-  <path d="M84 52v52M84 122v.01" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/>
+', 'Lámina sobre el cobro con tarjeta en una tienda en línea', $OBS, $R, $Q);
+
+// ---------------------------------------------------------- Blog: dominio
+$archivos['blog/dominio-gt-guatemala.svg'] = lamina(1200, 675, '
+<circle cx="600" cy="338" r="196" stroke="' . $R . '"/>
+<path d="M404 338h392" stroke="' . $R2 . '"/>
+<path d="M600 142c62 62 62 330 0 392M600 142c-62 62-62 330 0 392" stroke="' . $R2 . '"/>
+<path d="M446 216c92 40 216 40 308 0M446 460c92-40 216-40 308 0" stroke="' . $R2 . '"/>
+<rect x="330" y="296" width="540" height="84" fill="' . $OBS . '" stroke="' . $Q . '"/>
+<path d="M378 338v-13a13 13 0 0 1 26 0v13" stroke="' . $Q . '"/>
+<rect x="372" y="338" width="38" height="26" fill="' . $Q . '" stroke="none"/>
+<rect x="440" y="326" width="180" height="14" fill="rgba(243,240,233,.6)" stroke="none"/>
+<rect x="440" y="350" width="104" height="10" fill="rgba(243,240,233,.2)" stroke="none"/>
+<rect x="700" y="316" width="130" height="44" fill="' . $Q . '" stroke="none"/>
+', 'Lámina sobre el dominio .gt de Guatemala', $OBS, $R, $Q);
+
+// -------------------------------------------------------- Blog: 7 errores
+$archivos['blog/errores-contratar-diseno-web.svg'] = lamina(1200, 675, '
+<rect x="120" y="140" width="520" height="400" stroke="' . $R . '"/>
+<path d="M120 208h520" stroke="' . $R . '"/>
+' . reng(160, 168, [200], 'rgba(243,240,233,.35)', 12, 5) . '
+<g>
+  <path d="M164 258l10 11 20-24" stroke="' . $Q . '" stroke-width="1.6"/>
+  <rect x="222" y="256" width="360" height="10" fill="rgba(243,240,233,.16)" stroke="none"/>
+  <path d="M164 326l10 11 20-24" stroke="' . $Q . '" stroke-width="1.6"/>
+  <rect x="222" y="324" width="300" height="10" fill="rgba(243,240,233,.16)" stroke="none"/>
+  <path d="M162 388l24 24M186 388l-24 24" stroke="rgba(243,240,233,.5)" stroke-width="1.6"/>
+  <rect x="222" y="392" width="330" height="10" fill="rgba(243,240,233,.3)" stroke="none"/>
+  <path d="M164 462l10 11 20-24" stroke="' . $Q . '" stroke-width="1.6"/>
+  <rect x="222" y="460" width="260" height="10" fill="rgba(243,240,233,.16)" stroke="none"/>
 </g>
-<rect x="560" y="332" width="168" height="20" rx="10" fill="' . $LINE . '"/>
-<rect x="560" y="366" width="112" height="20" rx="10" fill="' . $LINE . '" opacity=".6"/>
-', 'Ilustración de una lista de verificación antes de contratar diseño web');
+<path d="M880 180l160 292H720z" stroke="' . $Q . '" stroke-width="1.6"/>
+<path d="M880 282v78" stroke="' . $Q . '" stroke-width="3"/>
+<rect x="874" y="396" width="12" height="12" fill="' . $Q . '" stroke="none"/>
+', 'Lámina sobre errores al contratar diseño web', $OBS, $R, $Q);
 
 foreach ($archivos as $nombre => $contenido) {
     file_put_contents($img . '/' . $nombre, $contenido);
-    echo '  ' . str_pad($nombre, 48) . round(strlen($contenido) / 1024, 1) . " KB\n";
+    echo '  ' . str_pad($nombre, 46) . round(strlen($contenido) / 1024, 1) . " KB\n";
 }
-echo "Ilustraciones generadas.\n";
+echo "Láminas generadas.\n";

@@ -7,16 +7,10 @@ foreach (Content::services() as $s) {
 $planes = $servicio ? Content::plans($servicio['id']) : [];
 ?>
 <?php if ($planes): ?>
-<section class="section section--white reveal" id="precios">
-  <div class="wrap">
-    <div class="section-head section-head--center">
-      <?php if ($section['eyebrow']): ?><p class="eyebrow"><?php echo e($section['eyebrow']); ?></p><?php endif; ?>
-      <h2><?php echo e($section['heading']); ?></h2>
-      <?php if ($section['subheading']): ?><p class="sub"><?php echo e($section['subheading']); ?></p><?php endif; ?>
-    </div>
-    <div class="plans" style="max-width:<?php echo count($planes) === 1 ? '520px' : 'none'; ?>;margin-inline:auto">
-      <?php foreach ($planes as $plan) { echo partial('partials/plan-card', ['plan' => $plan]); } ?>
-    </div>
+<?php echo partial('partials/band-open', ['lienzo' => $lienzo, 'regla' => $regla, 'id' => 'precios']); ?>
+  <?php echo partial('partials/head-block', ['section' => $section, 'n' => $n, 'split' => true]); ?>
+  <div class="plans rise"<?php echo count($planes) === 1 ? ' style="max-width:560px"' : ''; ?>>
+    <?php foreach ($planes as $p) { echo partial('partials/plan', ['plan' => $p]); } ?>
   </div>
-</section>
+<?php echo partial('partials/band-close'); ?>
 <?php endif; ?>

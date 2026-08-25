@@ -31,6 +31,9 @@ como dos sitios clonados:
   (servicio, precios, portafolio, guías), con bloques que servicom.gt no usa: tabla
   comparativa de los tres servicios, sección "cómo trabajamos y cómo no", bloque de
   respuesta directa para el fragmento destacado.
+- **Sistema visual propio.** El sitio no comparte plantilla, retícula, paleta ni
+  tipografía con servicom.gt ni con ningún tema comprado: el diseño se construyó
+  desde cero para este dominio.
 - **Voz distinta.** Este sitio habla en segunda persona con voseo guatemalteco y explica
   el porqué de cada decisión, incluso cuando la respuesta honesta es "no te conviene".
 - **Títulos y descripciones únicos**, sin coincidencias con los del otro dominio.

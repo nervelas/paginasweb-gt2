@@ -1,23 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" role="img" aria-label="Ilustración de los pasos para montar una tienda en línea"><title>Ilustración de los pasos para montar una tienda en línea</title>
-<rect width="800" height="450" fill="#F7F3EC"/>
-<circle cx="124" cy="392" r="170" fill="#E6F1EE"/>
-<path d="M232 128h336l26 62H206z" fill="#FF7A45"/>
-<rect x="232" y="190" width="336" height="184" rx="14" fill="#FFFFFF" stroke="#DFD8CC" stroke-width="2"/>
-<rect x="262" y="222" width="126" height="90" rx="12" fill="#E6F1EE"/>
-<circle cx="325" cy="262" r="26" fill="#12796B"/>
-<rect x="412" y="222" width="126" height="90" rx="12" fill="#E6F1EE"/>
-<rect x="446" y="246" width="58" height="46" rx="10" fill="#E4B85B"/>
-<rect x="262" y="330" width="126" height="14" rx="7" fill="#E4E9EC"/>
-<rect x="412" y="330" width="86" height="14" rx="7" fill="#E4E9EC"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Lámina sobre los pasos para montar una tienda en línea"><title>Lámina sobre los pasos para montar una tienda en línea</title><rect width="1200" height="675" fill="#0A0C0F"/><g stroke-width="1" shape-rendering="geometricPrecision"><rect x="22" y="22" width="1156" height="631" fill="none" stroke="rgba(243,240,233,.20)"/><path d="M22 34V22h12" stroke="#11E39A" fill="none"/><path d="M1178 641V653h-12" stroke="#11E39A" fill="none"/></g><g stroke-width="1.2" fill="none" stroke-linecap="square">
 <g>
-  <circle cx="140" cy="150" r="30" fill="#0B5347"/><path d="M128 150l8 9 16-18" stroke="#FFFFFF" stroke-width="4.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="140" cy="228" r="30" fill="#12796B"/><path d="M128 228l8 9 16-18" stroke="#FFFFFF" stroke-width="4.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="140" cy="306" r="30" fill="#FFFFFF" stroke="#DFD8CC" stroke-width="2.6"/><circle cx="140" cy="306" r="8" fill="#FF7A45"/>
-  <path d="M140 180v18M140 258v18" stroke="#12796B" stroke-width="3.4" stroke-linecap="round" opacity=".5"/>
+  <circle cx="180" cy="200" r="22" stroke="#11E39A"/><path d="M170 200l7 8 14-16" stroke="#11E39A"/>
+  <circle cx="180" cy="338" r="22" stroke="#11E39A"/><path d="M170 338l7 8 14-16" stroke="#11E39A"/>
+  <circle cx="180" cy="476" r="22" stroke="rgba(243,240,233,.20)"/>
+  <path d="M180 222v94M180 360v94" stroke="rgba(243,240,233,.10)"/>
+  <rect x="232" y="192" width="260" height="4" fill="rgba(243,240,233,.22)" stroke="none"/><rect x="232" y="207" width="190" height="4" fill="rgba(243,240,233,.22)" stroke="none"/>
+  <rect x="232" y="330" width="230" height="4" fill="rgba(243,240,233,.22)" stroke="none"/><rect x="232" y="345" width="170" height="4" fill="rgba(243,240,233,.22)" stroke="none"/>
+  <rect x="232" y="468" width="200" height="4" fill="rgba(243,240,233,.1)" stroke="none"/><rect x="232" y="483" width="150" height="4" fill="rgba(243,240,233,.1)" stroke="none"/>
 </g>
-<rect x="612" y="240" width="112" height="150" rx="18" fill="#0A1F2C"/>
-<rect x="626" y="262" width="84" height="106" rx="8" fill="#FFFFFF"/>
-<rect x="638" y="276" width="60" height="34" rx="7" fill="#E6F1EE"/>
-<rect x="638" y="320" width="60" height="9" rx="4.5" fill="#E4E9EC"/>
-<rect x="638" y="338" width="40" height="14" rx="7" fill="#FF7A45"/>
-</svg>
+<rect x="600" y="140" width="440" height="380" stroke="rgba(243,240,233,.20)"/>
+<path d="M600 210h440M820 210v310" stroke="rgba(243,240,233,.20)"/>
+<path d="M600 140l90-56h260l90 56" stroke="#11E39A" stroke-width="1.6"/>
+<rect x="640" y="250" width="140" height="100" stroke="rgba(243,240,233,.10)"/>
+<rect x="860" y="250" width="140" height="100" stroke="rgba(243,240,233,.10)"/>
+<rect x="640" y="386" width="140" height="4" fill="rgba(243,240,233,.16)" stroke="none"/><rect x="640" y="400" width="96" height="4" fill="rgba(243,240,233,.16)" stroke="none"/>
+<rect x="860" y="386" width="140" height="4" fill="rgba(243,240,233,.16)" stroke="none"/><rect x="860" y="400" width="96" height="4" fill="rgba(243,240,233,.16)" stroke="none"/>
+<rect x="640" y="452" width="110" height="30" fill="#11E39A" stroke="none"/>
+</g></svg>

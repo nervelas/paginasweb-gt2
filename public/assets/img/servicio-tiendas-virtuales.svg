@@ -1,20 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 360" width="440" height="360" role="img" aria-label="Ilustración de una tienda en línea con carrito de compras"><title>Ilustración de una tienda en línea con carrito de compras</title>
-<rect x="34" y="60" width="300" height="230" rx="18" fill="#FFFFFF" stroke="#DFD8CC" stroke-width="2"/>
-<path d="M34 78a18 18 0 0 1 18-18h264a18 18 0 0 1 18 18v16H34z" fill="#E6F1EE"/>
-<rect x="58" y="112" width="120" height="88" rx="12" fill="#E6F1EE"/>
-<circle cx="118" cy="150" r="24" fill="#12796B"/>
-<rect x="58" y="212" width="80" height="9" rx="4.5" fill="#DDE3E6"/>
-<rect x="58" y="230" width="52" height="12" rx="6" fill="#0A1F2C"/>
-<rect x="194" y="112" width="120" height="88" rx="12" fill="#E6F1EE"/>
-<rect x="228" y="134" width="52" height="44" rx="10" fill="#E4B85B"/>
-<rect x="194" y="212" width="80" height="9" rx="4.5" fill="#DDE3E6"/>
-<rect x="194" y="230" width="52" height="12" rx="6" fill="#0A1F2C"/>
-<rect x="58" y="258" width="256" height="14" rx="7" fill="#EDF1F0"/>
-<path d="M296 176h84a22 22 0 0 1 22 22v92a22 22 0 0 1-22 22h-84a22 22 0 0 1-22-22v-92a22 22 0 0 1 22-22z" fill="#0A1F2C"/>
-<path d="M296 210h58" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity=".35"/>
-<path d="M300 250h76" stroke="#FF7A45" stroke-width="9" stroke-linecap="round"/>
-<path d="M300 274h50" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" opacity=".3"/>
-<circle cx="146" cy="304" r="34" fill="#FF7A45"/>
-<path d="M132 292h5l4 20h18l4-14h-24" stroke="#FFFFFF" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="144" cy="318" r="2.6" fill="#FFFFFF"/><circle cx="155" cy="318" r="2.6" fill="#FFFFFF"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 420" width="520" height="420" role="img" aria-label="Lámina técnica de una tienda en línea"><title>Lámina técnica de una tienda en línea</title><rect width="520" height="420" fill="#0A0C0F"/><g stroke-width="1" shape-rendering="geometricPrecision"><rect x="22" y="22" width="476" height="376" fill="none" stroke="rgba(243,240,233,.20)"/><path d="M22 34V22h12" stroke="#11E39A" fill="none"/><path d="M498 386V398h-12" stroke="#11E39A" fill="none"/></g><g stroke-width="1.2" fill="none" stroke-linecap="square">
+<rect x="62" y="76" width="240" height="150" stroke="rgba(243,240,233,.20)"/>
+<path d="M62 76l240 150M302 76L62 226" stroke="rgba(243,240,233,.10)"/>
+<rect x="62" y="244" width="240" height="100" stroke="rgba(243,240,233,.20)"/>
+<rect x="84" y="268" width="130" height="4" fill="rgba(243,240,233,.4)" stroke="none"/><rect x="84" y="282" width="96" height="4" fill="rgba(243,240,233,.4)" stroke="none"/>
+<rect x="84" y="308" width="72" height="20" fill="#11E39A" stroke="none"/>
+<rect x="330" y="76" width="128" height="180" stroke="rgba(243,240,233,.20)"/>
+<path d="M330 112h128" stroke="rgba(243,240,233,.20)"/>
+<rect x="348" y="132" width="92" height="3" fill="rgba(243,240,233,.18)" stroke="none"/><rect x="348" y="144" width="74" height="3" fill="rgba(243,240,233,.18)" stroke="none"/><rect x="348" y="156" width="58" height="3" fill="rgba(243,240,233,.18)" stroke="none"/>
+<rect x="348" y="188" width="92" height="22" fill="#11E39A" stroke="none"/>
+<path d="M344 300h14l8 34h68l7-24h-72" stroke="#11E39A" stroke-width="1.6"/>
+<circle cx="368" cy="346" r="4" stroke="#11E39A"/>
+<circle cx="410" cy="346" r="4" stroke="#11E39A"/>
+</g></svg>

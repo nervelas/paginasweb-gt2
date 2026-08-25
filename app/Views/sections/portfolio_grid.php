@@ -1,37 +1,49 @@
 <?php
 use App\Models\Content;
-$limit = isset($section['extra']['limit']) ? (int) $section['extra']['limit'] : 0;
-$items = Content::portfolio($limit);
+$limite = isset($section['extra']['limit']) ? (int) $section['extra']['limit'] : 0;
+$items  = Content::portfolio($limite);
+$rejilla = !empty($section['extra']['grid']);
 ?>
-<section class="section section--white reveal">
-  <div class="wrap">
-    <div class="section-head">
-      <?php if ($section['eyebrow']): ?><p class="eyebrow"><?php echo e($section['eyebrow']); ?></p><?php endif; ?>
-      <?php if ($section['heading']): ?><h2><?php echo e($section['heading']); ?></h2><?php endif; ?>
-      <?php if ($section['subheading']): ?><p class="sub"><?php echo e($section['subheading']); ?></p><?php endif; ?>
-    </div>
-    <div class="portfolio-grid">
-      <?php foreach ($items as $i => $item): ?>
-      <a class="card card--link portfolio-card" href="<?php echo e($item['url']); ?>" rel="noopener">
-        <div class="portfolio-card__shot">
-          <img src="<?php echo e($item['image']); ?>" alt="<?php echo e($item['image_alt']); ?>"
-               width="640" height="400" loading="<?php echo $i < 4 ? 'eager' : 'lazy'; ?>" decoding="async">
-        </div>
-        <div class="portfolio-card__body">
-          <span class="portfolio-card__sector"><?php echo e($item['sector']); ?></span>
-          <h3><?php echo e($item['name']); ?></h3>
-          <p><?php echo e($item['description']); ?></p>
-          <span class="portfolio-card__domain">
-            <?php echo e($item['domain']); ?> <?php echo partial('partials/icon', ['name' => 'external', 'size' => 13]); ?>
-          </span>
-        </div>
-      </a>
-      <?php endforeach; ?>
-    </div>
-    <?php if ($section['cta_text']): ?>
-    <p style="margin-top:2.4rem;text-align:center">
-      <a class="btn btn--ghost" href="<?php echo e($section['cta_url']); ?>"><?php echo e($section['cta_text']); ?></a>
-    </p>
-    <?php endif; ?>
+<?php echo partial('partials/band-open', ['lienzo' => $lienzo, 'regla' => $regla]); ?>
+  <?php echo partial('partials/head-block', ['section' => $section, 'n' => $n, 'split' => true]); ?>
+
+  <?php if ($rejilla): ?>
+  <div class="works rise">
+    <?php foreach ($items as $i => $p): ?>
+    <a class="work" href="<?php echo e($p['url']); ?>" rel="noopener">
+      <div class="work__shot">
+        <img src="<?php echo e($p['image']); ?>" alt="<?php echo e($p['image_alt']); ?>"
+             width="640" height="400" loading="<?php echo $i < 3 ? 'eager' : 'lazy'; ?>" decoding="async">
+      </div>
+      <div class="work__body">
+        <span class="work__sector"><?php echo e($p['sector']); ?></span>
+        <h3><?php echo e($p['name']); ?></h3>
+        <p><?php echo e($p['description']); ?></p>
+        <span class="work__dom"><?php echo e($p['domain']); ?> <?php echo partial('partials/icon', ['name' => 'externo', 'size' => 11]); ?></span>
+      </div>
+    </a>
+    <?php endforeach; ?>
   </div>
-</section>
+  <?php else: ?>
+  <div class="index rise" data-preview-index>
+    <?php foreach ($items as $i => $p): ?>
+    <article class="index__row" data-shot="<?php echo e($p['image']); ?>">
+      <span class="index__n"><?php echo str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT); ?></span>
+      <h3 class="index__name"><a href="<?php echo e($p['url']); ?>" rel="noopener"><?php echo e($p['name']); ?></a></h3>
+      <span class="index__sector"><?php echo e($p['sector']); ?></span>
+      <p class="index__desc"><?php echo e(excerpt($p['description'], 76)); ?></p>
+      <span class="index__go"><?php echo e($p['domain']); ?> <?php echo partial('partials/icon', ['name' => 'diagonal', 'size' => 12]); ?></span>
+    </article>
+    <?php endforeach; ?>
+  </div>
+  <?php endif; ?>
+
+  <?php if ($section['cta_text']): ?>
+  <p style="margin-top:clamp(32px,4vw,52px)">
+    <a class="btn btn--line" href="<?php echo e($section['cta_url']); ?>">
+      <?php echo e($section['cta_text']); ?>
+      <?php echo partial('partials/icon', ['name' => 'flecha', 'size' => 15]); ?>
+    </a>
+  </p>
+  <?php endif; ?>
+<?php echo partial('partials/band-close'); ?>

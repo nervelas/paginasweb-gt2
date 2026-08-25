@@ -1,21 +1,21 @@
 <?php
 use App\Core\Settings;
 $menu = [
-    ['url' => '/admin/',               'label' => 'Escritorio',   'icono' => 'layout'],
-    ['url' => '/admin/paginas/',       'label' => 'Páginas',      'icono' => 'browser'],
-    ['url' => '/admin/servicios/',     'label' => 'Servicios',    'icono' => 'box'],
-    ['url' => '/admin/planes/',        'label' => 'Precios',      'icono' => 'chart'],
-    ['url' => '/admin/portafolio/',    'label' => 'Portafolio',   'icono' => 'image'],
-    ['url' => '/admin/blog/',          'label' => 'Blog',         'icono' => 'edit'],
-    ['url' => '/admin/categorias/',    'label' => 'Categorías',   'icono' => 'file'],
+    ['url' => '/admin/',               'label' => 'Escritorio',   'icono' => 'retícula'],
+    ['url' => '/admin/paginas/',       'label' => 'Páginas',      'icono' => 'navegador'],
+    ['url' => '/admin/servicios/',     'label' => 'Servicios',    'icono' => 'caja'],
+    ['url' => '/admin/planes/',        'label' => 'Precios',      'icono' => 'grafica'],
+    ['url' => '/admin/portafolio/',    'label' => 'Portafolio',   'icono' => 'imagen'],
+    ['url' => '/admin/blog/',          'label' => 'Blog',         'icono' => 'lapiz'],
+    ['url' => '/admin/categorias/',    'label' => 'Categorías',   'icono' => 'archivo'],
     ['url' => '/admin/faq/',           'label' => 'Preguntas',    'icono' => 'chat'],
-    ['url' => '/admin/testimonios/',   'label' => 'Testimonios',  'icono' => 'shield'],
-    ['url' => '/admin/medios/',        'label' => 'Medios',       'icono' => 'image'],
-    ['url' => '/admin/menus/',         'label' => 'Menús',        'icono' => 'layout'],
-    ['url' => '/admin/mensajes/',      'label' => 'Mensajes',     'icono' => 'mail', 'contador' => $pendientes],
-    ['url' => '/admin/redirecciones/', 'label' => 'Redirecciones','icono' => 'arrow'],
-    ['url' => '/admin/configuracion/', 'label' => 'Configuración','icono' => 'shield'],
-    ['url' => '/admin/herramientas/',  'label' => 'Herramientas', 'icono' => 'bolt'],
+    ['url' => '/admin/testimonios/',   'label' => 'Testimonios',  'icono' => 'escudo'],
+    ['url' => '/admin/medios/',        'label' => 'Medios',       'icono' => 'imagen'],
+    ['url' => '/admin/menus/',         'label' => 'Menús',        'icono' => 'retícula'],
+    ['url' => '/admin/mensajes/',      'label' => 'Mensajes',     'icono' => 'sobre', 'contador' => $pendientes],
+    ['url' => '/admin/redirecciones/', 'label' => 'Redirecciones','icono' => 'flecha'],
+    ['url' => '/admin/configuracion/', 'label' => 'Configuración','icono' => 'escudo'],
+    ['url' => '/admin/herramientas/',  'label' => 'Herramientas', 'icono' => 'rayo'],
 ];
 $actual = isset($currentPath) ? $currentPath : '/admin/';
 $aviso  = flash();
@@ -36,7 +36,7 @@ $aviso  = flash();
     <span></span>
   </button>
   <a class="ad-marca" href="/admin/">
-    <img src="/assets/img/logo-paginasweb-gt.svg" alt="" width="150" height="26">
+    <img src="/assets/img/marca.svg" alt="" width="174" height="24">
     <span>Panel</span>
   </a>
   <div class="ad-top__acciones">

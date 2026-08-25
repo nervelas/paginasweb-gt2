@@ -1,22 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" role="img" aria-label="Ilustración de una lista de verificación antes de contratar diseño web"><title>Ilustración de una lista de verificación antes de contratar diseño web</title>
-<rect width="800" height="450" fill="#F7F3EC"/>
-<circle cx="700" cy="96" r="150" fill="#E6F1EE"/>
-<rect x="140" y="76" width="380" height="308" rx="22" fill="#FFFFFF" stroke="#DFD8CC" stroke-width="2.6"/>
-<rect x="176" y="112" width="180" height="18" rx="9" fill="#0A1F2C"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Lámina sobre errores al contratar diseño web"><title>Lámina sobre errores al contratar diseño web</title><rect width="1200" height="675" fill="#0A0C0F"/><g stroke-width="1" shape-rendering="geometricPrecision"><rect x="22" y="22" width="1156" height="631" fill="none" stroke="rgba(243,240,233,.20)"/><path d="M22 34V22h12" stroke="#11E39A" fill="none"/><path d="M1178 641V653h-12" stroke="#11E39A" fill="none"/></g><g stroke-width="1.2" fill="none" stroke-linecap="square">
+<rect x="120" y="140" width="520" height="400" stroke="rgba(243,240,233,.20)"/>
+<path d="M120 208h520" stroke="rgba(243,240,233,.20)"/>
+<rect x="160" y="168" width="200" height="5" fill="rgba(243,240,233,.35)" stroke="none"/>
 <g>
-  <circle cx="192" cy="176" r="17" fill="#0B5347"/><path d="M184 176l6 7 12-14" stroke="#FFFFFF" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="224" y="168" width="220" height="14" rx="7" fill="#E4E9EC"/>
-  <circle cx="192" cy="228" r="17" fill="#0B5347"/><path d="M184 228l6 7 12-14" stroke="#FFFFFF" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="224" y="220" width="180" height="14" rx="7" fill="#E4E9EC"/>
-  <circle cx="192" cy="280" r="17" fill="#F3E7E2"/><path d="M186 274l12 12M198 274l-12 12" stroke="#B4543A" stroke-width="3.6" stroke-linecap="round"/>
-  <rect x="224" y="272" width="200" height="14" rx="7" fill="#F2DED8"/>
-  <circle cx="192" cy="332" r="17" fill="#0B5347"/><path d="M184 332l6 7 12-14" stroke="#FFFFFF" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="224" y="324" width="150" height="14" rx="7" fill="#E4E9EC"/>
+  <path d="M164 258l10 11 20-24" stroke="#11E39A" stroke-width="1.6"/>
+  <rect x="222" y="256" width="360" height="10" fill="rgba(243,240,233,.16)" stroke="none"/>
+  <path d="M164 326l10 11 20-24" stroke="#11E39A" stroke-width="1.6"/>
+  <rect x="222" y="324" width="300" height="10" fill="rgba(243,240,233,.16)" stroke="none"/>
+  <path d="M162 388l24 24M186 388l-24 24" stroke="rgba(243,240,233,.5)" stroke-width="1.6"/>
+  <rect x="222" y="392" width="330" height="10" fill="rgba(243,240,233,.3)" stroke="none"/>
+  <path d="M164 462l10 11 20-24" stroke="#11E39A" stroke-width="1.6"/>
+  <rect x="222" y="460" width="260" height="10" fill="rgba(243,240,233,.16)" stroke="none"/>
 </g>
-<g transform="translate(560 150)">
-  <path d="M84 0l84 150H0z" fill="#FF7A45"/>
-  <path d="M84 52v52M84 122v.01" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/>
-</g>
-<rect x="560" y="332" width="168" height="20" rx="10" fill="#DFD8CC"/>
-<rect x="560" y="366" width="112" height="20" rx="10" fill="#DFD8CC" opacity=".6"/>
-</svg>
+<path d="M880 180l160 292H720z" stroke="#11E39A" stroke-width="1.6"/>
+<path d="M880 282v78" stroke="#11E39A" stroke-width="3"/>
+<rect x="874" y="396" width="12" height="12" fill="#11E39A" stroke="none"/>
+</g></svg>

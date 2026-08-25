@@ -27,7 +27,7 @@ HTML,
         [
             'block_type' => 'portfolio_grid',
             'heading'    => 'Sitios publicados',
-            'extra'      => ['limit' => 0],
+            'extra'      => ['limit' => 0, 'grid' => true],
         ],
         [
             'block_type' => 'cta',

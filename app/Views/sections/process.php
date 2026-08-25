@@ -1,20 +1,15 @@
-<?php $steps = isset($section['extra']['steps']) ? $section['extra']['steps'] : []; ?>
-<section class="section section--brand-soft reveal">
-  <div class="wrap">
-    <div class="section-head">
-      <?php if ($section['eyebrow']): ?><p class="eyebrow"><?php echo e($section['eyebrow']); ?></p><?php endif; ?>
-      <h2><?php echo e($section['heading']); ?></h2>
-      <?php if ($section['subheading']): ?><p class="sub"><?php echo e($section['subheading']); ?></p><?php endif; ?>
-    </div>
-    <div class="process<?php echo count($steps) >= 4 ? ' process--cols' : ''; ?>">
-      <?php foreach ($steps as $step): ?>
-      <div class="process__step">
-        <div>
-          <h3><?php echo e($step['title']); ?></h3>
-          <p><?php echo e($step['text']); ?></p>
-        </div>
+<?php $pasos = isset($section['extra']['steps']) ? $section['extra']['steps'] : []; ?>
+<?php echo partial('partials/band-open', ['lienzo' => $lienzo, 'regla' => $regla]); ?>
+  <?php echo partial('partials/head-block', ['section' => $section, 'n' => $n, 'split' => true]); ?>
+  <div class="steps rise">
+    <?php foreach ($pasos as $i => $paso): ?>
+    <div class="step">
+      <span class="step__n"><?php echo str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT); ?></span>
+      <div class="step__body">
+        <h3><?php echo e($paso['title']); ?></h3>
+        <p><?php echo e($paso['text']); ?></p>
       </div>
-      <?php endforeach; ?>
     </div>
+    <?php endforeach; ?>
   </div>
-</section>
+<?php echo partial('partials/band-close'); ?>
