@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 360" width="440" height="360" role="img" aria-label="Ilustración de bandeja de correo con dominio propio"><title>Ilustración de bandeja de correo con dominio propio</title>
+<rect x="42" y="76" width="290" height="196" rx="18" fill="#E6F1EE"/>
+<rect x="72" y="104" width="290" height="196" rx="18" fill="#FFFFFF" stroke="#DFD8CC" stroke-width="2"/>
+<path d="M74 122l143 100 143-100" stroke="#12796B" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M72 122a18 18 0 0 1 18-18h254a18 18 0 0 1 18 18" stroke="#DFD8CC" stroke-width="2" fill="none"/>
+<circle cx="356" cy="106" r="34" fill="#FF7A45"/>
+<path d="M366 100a13 13 0 1 0-4 20c4 2 9 1 12-1" stroke="#FFFFFF" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+<circle cx="356" cy="108" r="6.5" fill="none" stroke="#FFFFFF" stroke-width="3.2"/>
+<rect x="110" y="246" width="150" height="9" rx="4.5" fill="#E4E9EC"/>
+<rect x="110" y="266" width="96" height="9" rx="4.5" fill="#E4E9EC"/>
+<rect x="86" y="308" width="180" height="34" rx="12" fill="#0B5347"/>
+<path d="M104 325h8l4 6 6-14 5 8h10" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="150" y="320" width="94" height="8" rx="4" fill="#FFFFFF" opacity=".3"/>
+<rect x="292" y="286" width="86" height="60" rx="12" fill="#12796B"/>
+<path d="M308 306h54M308 322h34" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity=".82"/>
+</svg>

@@ -1,0 +1,21 @@
+# Configuración generada por el instalador: no se versiona
+/config/config.php
+
+# Archivos internos
+/storage/*.sqlite
+/storage/*.lock
+/storage/cache/
+
+# Imágenes subidas desde el panel
+/public/uploads/*
+!/public/uploads/.htaccess
+!/public/uploads/index.php
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Dependencias de desarrollo (no se usan en producción)
+/node_modules/

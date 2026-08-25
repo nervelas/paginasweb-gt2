@@ -1,0 +1,17 @@
+{
+  "name": "paginasweb.gt — Páginas web y tiendas virtuales en Guatemala",
+  "short_name": "paginasweb.gt",
+  "description": "Diseño de páginas web y tiendas virtuales para negocios de Guatemala.",
+  "lang": "es-GT",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F7F3EC",
+  "theme_color": "#0A1F2C",
+  "icons": [
+    { "src": "/assets/img/icons/icono-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/img/icons/icono-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/assets/img/icons/icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

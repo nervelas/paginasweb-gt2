@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 360" width="440" height="360" role="img" aria-label="Ilustración de una tienda en línea con carrito de compras"><title>Ilustración de una tienda en línea con carrito de compras</title>
+<rect x="34" y="60" width="300" height="230" rx="18" fill="#FFFFFF" stroke="#DFD8CC" stroke-width="2"/>
+<path d="M34 78a18 18 0 0 1 18-18h264a18 18 0 0 1 18 18v16H34z" fill="#E6F1EE"/>
+<rect x="58" y="112" width="120" height="88" rx="12" fill="#E6F1EE"/>
+<circle cx="118" cy="150" r="24" fill="#12796B"/>
+<rect x="58" y="212" width="80" height="9" rx="4.5" fill="#DDE3E6"/>
+<rect x="58" y="230" width="52" height="12" rx="6" fill="#0A1F2C"/>
+<rect x="194" y="112" width="120" height="88" rx="12" fill="#E6F1EE"/>
+<rect x="228" y="134" width="52" height="44" rx="10" fill="#E4B85B"/>
+<rect x="194" y="212" width="80" height="9" rx="4.5" fill="#DDE3E6"/>
+<rect x="194" y="230" width="52" height="12" rx="6" fill="#0A1F2C"/>
+<rect x="58" y="258" width="256" height="14" rx="7" fill="#EDF1F0"/>
+<path d="M296 176h84a22 22 0 0 1 22 22v92a22 22 0 0 1-22 22h-84a22 22 0 0 1-22-22v-92a22 22 0 0 1 22-22z" fill="#0A1F2C"/>
+<path d="M296 210h58" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity=".35"/>
+<path d="M300 250h76" stroke="#FF7A45" stroke-width="9" stroke-linecap="round"/>
+<path d="M300 274h50" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" opacity=".3"/>
+<circle cx="146" cy="304" r="34" fill="#FF7A45"/>
+<path d="M132 292h5l4 20h18l4-14h-24" stroke="#FFFFFF" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="144" cy="318" r="2.6" fill="#FFFFFF"/><circle cx="155" cy="318" r="2.6" fill="#FFFFFF"/>
+</svg>

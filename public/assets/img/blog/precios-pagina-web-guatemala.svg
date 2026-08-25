@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" role="img" aria-label="Ilustración sobre precios de páginas web en Guatemala"><title>Ilustración sobre precios de páginas web en Guatemala</title>
+<rect width="800" height="450" fill="#F7F3EC"/>
+<circle cx="672" cy="72" r="180" fill="#E6F1EE"/>
+<rect x="80" y="112" width="300" height="230" rx="20" fill="#FFFFFF" stroke="#DFD8CC" stroke-width="2"/>
+<rect x="80" y="112" width="300" height="56" rx="20" fill="#0A1F2C"/>
+<rect x="80" y="148" width="300" height="20" fill="#0A1F2C"/>
+<rect x="112" y="132" width="120" height="16" rx="8" fill="#FFFFFF" opacity=".55"/>
+<rect x="112" y="200" width="160" height="26" rx="13" fill="#12796B"/>
+<rect x="112" y="248" width="200" height="8" rx="4" fill="#E4E9EC"/><rect x="112" y="268" width="170" height="8" rx="4" fill="#E4E9EC"/><rect x="112" y="288" width="130" height="8" rx="4" fill="#E4E9EC"/>
+<rect x="112" y="304" width="120" height="18" rx="9" fill="#FF7A45"/>
+<g transform="translate(430 130)">
+  <rect x="0" y="150" width="52" height="70" rx="10" fill="#E6F1EE"/>
+  <rect x="70" y="104" width="52" height="116" rx="10" fill="#12796B"/>
+  <rect x="140" y="56" width="52" height="164" rx="10" fill="#0B5347"/>
+  <rect x="210" y="16" width="52" height="204" rx="10" fill="#FF7A45"/>
+</g>
+<path d="M430 372h262" stroke="#DFD8CC" stroke-width="3" stroke-linecap="round"/>
+<circle cx="642" cy="112" r="42" fill="#E4B85B"/>
+<path d="M642 90v44M632 100h16a8 8 0 0 1 0 16h-14a8 8 0 0 0 0 16h18" stroke="#FFFFFF" stroke-width="4.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

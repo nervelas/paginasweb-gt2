@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" role="img" aria-label="Ilustración de los pasos para montar una tienda en línea"><title>Ilustración de los pasos para montar una tienda en línea</title>
+<rect width="800" height="450" fill="#F7F3EC"/>
+<circle cx="124" cy="392" r="170" fill="#E6F1EE"/>
+<path d="M232 128h336l26 62H206z" fill="#FF7A45"/>
+<rect x="232" y="190" width="336" height="184" rx="14" fill="#FFFFFF" stroke="#DFD8CC" stroke-width="2"/>
+<rect x="262" y="222" width="126" height="90" rx="12" fill="#E6F1EE"/>
+<circle cx="325" cy="262" r="26" fill="#12796B"/>
+<rect x="412" y="222" width="126" height="90" rx="12" fill="#E6F1EE"/>
+<rect x="446" y="246" width="58" height="46" rx="10" fill="#E4B85B"/>
+<rect x="262" y="330" width="126" height="14" rx="7" fill="#E4E9EC"/>
+<rect x="412" y="330" width="86" height="14" rx="7" fill="#E4E9EC"/>
+<g>
+  <circle cx="140" cy="150" r="30" fill="#0B5347"/><path d="M128 150l8 9 16-18" stroke="#FFFFFF" stroke-width="4.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="140" cy="228" r="30" fill="#12796B"/><path d="M128 228l8 9 16-18" stroke="#FFFFFF" stroke-width="4.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="140" cy="306" r="30" fill="#FFFFFF" stroke="#DFD8CC" stroke-width="2.6"/><circle cx="140" cy="306" r="8" fill="#FF7A45"/>
+  <path d="M140 180v18M140 258v18" stroke="#12796B" stroke-width="3.4" stroke-linecap="round" opacity=".5"/>
+</g>
+<rect x="612" y="240" width="112" height="150" rx="18" fill="#0A1F2C"/>
+<rect x="626" y="262" width="84" height="106" rx="8" fill="#FFFFFF"/>
+<rect x="638" y="276" width="60" height="34" rx="7" fill="#E6F1EE"/>
+<rect x="638" y="320" width="60" height="9" rx="4.5" fill="#E4E9EC"/>
+<rect x="638" y="338" width="40" height="14" rx="7" fill="#FF7A45"/>
+</svg>

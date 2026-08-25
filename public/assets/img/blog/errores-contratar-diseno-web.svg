@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" role="img" aria-label="Ilustración de una lista de verificación antes de contratar diseño web"><title>Ilustración de una lista de verificación antes de contratar diseño web</title>
+<rect width="800" height="450" fill="#F7F3EC"/>
+<circle cx="700" cy="96" r="150" fill="#E6F1EE"/>
+<rect x="140" y="76" width="380" height="308" rx="22" fill="#FFFFFF" stroke="#DFD8CC" stroke-width="2.6"/>
+<rect x="176" y="112" width="180" height="18" rx="9" fill="#0A1F2C"/>
+<g>
+  <circle cx="192" cy="176" r="17" fill="#0B5347"/><path d="M184 176l6 7 12-14" stroke="#FFFFFF" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="224" y="168" width="220" height="14" rx="7" fill="#E4E9EC"/>
+  <circle cx="192" cy="228" r="17" fill="#0B5347"/><path d="M184 228l6 7 12-14" stroke="#FFFFFF" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="224" y="220" width="180" height="14" rx="7" fill="#E4E9EC"/>
+  <circle cx="192" cy="280" r="17" fill="#F3E7E2"/><path d="M186 274l12 12M198 274l-12 12" stroke="#B4543A" stroke-width="3.6" stroke-linecap="round"/>
+  <rect x="224" y="272" width="200" height="14" rx="7" fill="#F2DED8"/>
+  <circle cx="192" cy="332" r="17" fill="#0B5347"/><path d="M184 332l6 7 12-14" stroke="#FFFFFF" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="224" y="324" width="150" height="14" rx="7" fill="#E4E9EC"/>
+</g>
+<g transform="translate(560 150)">
+  <path d="M84 0l84 150H0z" fill="#FF7A45"/>
+  <path d="M84 52v52M84 122v.01" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/>
+</g>
+<rect x="560" y="332" width="168" height="20" rx="10" fill="#DFD8CC"/>
+<rect x="560" y="366" width="112" height="20" rx="10" fill="#DFD8CC" opacity=".6"/>
+</svg>
